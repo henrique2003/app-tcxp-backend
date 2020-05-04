@@ -2,12 +2,14 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 
-import { Auth, Groups, User } from './app/routes'
+import { User, Auth, Groups } from './app/routes'
+import Db from './config/db'
 
 class App {
   public express: express.Application
 
   public constructor () {
+    Db.connectDb()
     this.express = express()
     this.middlewares()
     this.routes()
@@ -20,9 +22,9 @@ class App {
   }
 
   private routes (): void {
+    this.express.use('/api', User)
     this.express.use('/api', Auth)
     this.express.use('/api', Groups)
-    this.express.use('/api', User)
   }
 }
 
