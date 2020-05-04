@@ -11,6 +11,7 @@
     "@types/jest": "^25.2.1",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/mongoose": "^5.7.15",
+    "@types/mongoose-paginate": "^5.0.8",
     "@types/node": "^13.13.4",
     "@typescript-eslint/eslint-plugin": "2",
     "eslint": "^6.8.0",
@@ -37,6 +38,7 @@
     "express": "^4.17.1",
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.11"
+    "mongoose": "^5.9.11",
+    "mongoose-paginate": "^5.0.3"
   }
 }
