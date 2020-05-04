@@ -26,5 +26,8 @@
     "test:integration": "npm test -- --watchAll",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
   }
 }
