@@ -49,6 +49,4 @@ const GroupsSchema = new Schema({
 
 GroupsSchema.plugin(mongoosePaginate)
 
-const Groups: Model<PaginateResult> = model<PaginateResult>('Groups', GroupsSchema)
-
-export default Groups
+export const Groups: Model<PaginateResult> = model<PaginateResult>('Groups', GroupsSchema)
