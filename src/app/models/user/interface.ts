@@ -1,9 +1,9 @@
 import { Document } from 'mongoose'
 
 export default interface UserInterface extends Document {
-  name?: string
-  password?: string
-  email?: string
+  name: string
+  password: string
+  email: string
   cpf?: string
   rg?: string
   country?: string
