@@ -4,7 +4,9 @@
   "main": "index.js",
   "author": "Henrique de melo <henrique.de.melo.cristioglu@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "git-commit-msg-linter": "^2.4.2"
+  "devDependencies": {
+    "@types/node": "^13.13.4",
+    "git-commit-msg-linter": "^2.4.2",
+    "typescript": "^3.8.3"
   }
 }
