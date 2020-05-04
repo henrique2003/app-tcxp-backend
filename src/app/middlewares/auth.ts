@@ -8,7 +8,7 @@ interface Decoded {
   exp: number
 }
 
-const auth = (req: Request, res: Response, next: NextFunction) => {
+export const auth = (req: Request, res: Response, next: NextFunction) => {
   const authHeaders = req.header('Authorization')
 
   if (!authHeaders) return res.status(401).json('Token não encontrado')
@@ -22,5 +22,3 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json('Token inválido')
   }
 }
-
-export default auth
