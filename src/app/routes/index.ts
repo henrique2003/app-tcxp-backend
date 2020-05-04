@@ -1,6 +1,6 @@
-import Auth from './Auth'
-import Groups from './Groups'
-import User from './User'
+import Auth from './auth'
+import Groups from './groups'
+import User from './user'
 
 export {
   Auth,
