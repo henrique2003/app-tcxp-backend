@@ -1,4 +1,5 @@
 import { Document } from 'mongoose'
+import { GroupsDocsInterface } from '../Groups/interface'
 
 export default interface UserInterface extends Document {
   name: string
@@ -20,4 +21,5 @@ export default interface UserInterface extends Document {
 
 interface InviteGroup {
   user: UserInterface
+  Group: GroupsDocsInterface
 }
