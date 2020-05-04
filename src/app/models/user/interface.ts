@@ -20,4 +20,5 @@ export default interface UserInterface extends Document {
 
 interface InviteGroup {
   user: UserInterface
+  Group: GroupsDocsInterface
 }
