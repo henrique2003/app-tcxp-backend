@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 
-import { User, Auth, Groups } from './app/routes'
+import { User, Auth, Group } from './app/routes'
 import Db from './config/db'
 
 class App {
@@ -24,7 +24,7 @@ class App {
   private routes (): void {
     this.express.use('/api', User)
     this.express.use('/api', Auth)
-    this.express.use('/api', Groups)
+    this.express.use('/api', Group)
   }
 }
 

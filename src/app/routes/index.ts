@@ -1,9 +1,9 @@
 import Auth from './auth'
-import Groups from './groups'
+import Group from './group'
 import User from './user'
 
 export {
   Auth,
-  Groups,
+  Group,
   User
 }
