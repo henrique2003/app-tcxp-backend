@@ -1,5 +1,5 @@
-import { Schema, model, Model } from 'mongoose'
-import mongoosePaginate from 'mongoose-paginate'
+import { Schema, model } from 'mongoose'
+import { mongoosePagination } from 'ts-mongoose-pagination'
 import PaginateResult from './interface'
 
 const GroupsSchema = new Schema({
@@ -47,6 +47,6 @@ const GroupsSchema = new Schema({
   timestamps: true
 })
 
-GroupsSchema.plugin(mongoosePaginate)
+GroupsSchema.plugin(mongoosePagination)
 
-export const Groups: Model<PaginateResult> = model<PaginateResult>('Groups', GroupsSchema)
+export const Groups = model<PaginateResult>('Groups', GroupsSchema)
