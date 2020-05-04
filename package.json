@@ -28,11 +28,6 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
-    "test:verbose": "jest --passWithNoTests --runInBand",
-    "test:integration": "npm test -- --watchAll",
-    "test:staged": "npm test -- --findRelatedTests",
-    "test:ci": "npm test -- --coverage",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts --watch",
     "start": "node ./dist/server.js"
   },
@@ -43,16 +38,5 @@
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.11"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.ts": [
-      "eslint 'src/**' --fix",
-      "yarn test:staged"
-    ]
   }
 }

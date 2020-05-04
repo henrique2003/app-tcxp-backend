@@ -52,27 +52,9 @@ const UserSchema = new Schema({
     },
     select: false
   }],
-  facebook: {
-    type: String,
-    match: [
-      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
-      'Please use a valid URL with Http ou Https'
-    ]
-  },
-  twitter: {
-    type: String,
-    match: [
-      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
-      'Please use a valid URL with Http ou Https'
-    ]
-  },
-  instagram: {
-    type: String,
-    match: [
-      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
-      'Please use a valid URL with Http ou Https'
-    ]
-  },
+  facebook: String,
+  twitter: String,
+  instagram: String,
   emailConfirmation: {
     type: Boolean,
     default: false

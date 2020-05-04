@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import { verify } from 'jsonwebtoken'
-import { secret } from '../../config/auth.json'
+import configAuth from '../../config/configAuth'
 
-interface Payload {
+interface Decoded {
   id: string
   iat: number
   exp: number
@@ -14,7 +14,7 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
   if (!authHeaders) return res.status(401).json('Token não encontrado')
 
   try {
-    const decoded = verify(authHeaders, secret) as Payload
+    const decoded = verify(authHeaders, configAuth.secret) as Decoded
     req.userId = decoded.id
 
     next()
