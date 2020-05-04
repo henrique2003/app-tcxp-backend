@@ -1,0 +1,10 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Henrique de melo <henrique.de.melo.cristioglu@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "git-commit-msg-linter": "^2.4.2"
+  }
+}
