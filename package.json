@@ -22,6 +22,8 @@
     "husky": "^4.2.5",
     "jest": "^26.0.0",
     "lint-staged": "^10.2.2",
+    "ts-node": "^8.10.1",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.8.3"
   },
   "scripts": {
@@ -30,6 +32,7 @@
     "test:integration": "npm test -- --watchAll",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
+    "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts --watch",
     "start": "node ./dist/server.js"
   },
   "dependencies": {
