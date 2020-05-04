@@ -2577,6 +2577,11 @@ http-errors@~1.7.2:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.0"
 
+http-server-res@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/http-server-res/-/http-server-res-2.0.1.tgz#be541762c75b27c5384ec0341a2044e703c3d899"
+  integrity sha512-uFoiCumklcM8+7IKrt/u6sfbsToU04xr2HjcZIckS4XVZCJBbQ254RBOwkH8uzrxjowBRXr+h44HBqE0wDrI7A==
+
 http-signature@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/http-signature/-/http-signature-1.2.0.tgz#9aecd925114772f3d95b65a60abb8f7c18fbace1"
