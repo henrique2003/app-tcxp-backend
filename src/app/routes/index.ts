@@ -1,5 +1,7 @@
 import Auth from './Auth'
+import Groups from './Groups'
 
 export {
-  Auth
+  Auth,
+  Groups
 }
