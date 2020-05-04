@@ -28,6 +28,7 @@
     "test:ci": "npm test -- --coverage"
   },
   "dependencies": {
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "helmet": "^3.22.0"
   }
 }
