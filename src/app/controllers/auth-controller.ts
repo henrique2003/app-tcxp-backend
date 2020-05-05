@@ -6,12 +6,13 @@ import { generateToken, isValidFields, cleanFields } from '../../utils'
 class AuthController {
   public async login (req: Request, res: Response): Promise<Response> {
     try {
-      const { email, password } = req.body
+      const { body } = req
+      const { email, password } = body
 
-      req.body = cleanFields(req.body)
+      req.body = cleanFields(body)
 
       const requiredFields = ['email', 'password']
-      if (!isValidFields(requiredFields, req.body)) {
+      if (!isValidFields(requiredFields, body)) {
         return res.status(400).json('Campo em branco')
       }
 
