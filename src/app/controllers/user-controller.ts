@@ -1,11 +1,10 @@
-import UserInterface from '../models/user/protocols'
-import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import validator from 'validator'
+import UserInterface from '../models/user/protocols'
+import { Request, Response } from 'express'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields, titleize } from '../../utils'
-import { missingParamError } from '../Errors/missing-param-error'
-import { invalidFieldError } from '../Errors/invalid-field-error'
+import { missingParamError, invalidFieldError } from '../Errors'
 
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
