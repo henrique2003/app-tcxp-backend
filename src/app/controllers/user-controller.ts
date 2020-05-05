@@ -17,7 +17,7 @@ class UserController {
   public async store (req: Request, res: Response): Promise<Response> {
     try {
       const { body } = req
-      const { password, email } = body
+      const { password, email, name } = body
 
       // Clean fields
       req.body = cleanFields(body)
@@ -38,20 +38,19 @@ class UserController {
         return res.status(400).json('Email em uso')
       }
 
-      // Put the first letter of name in capital
-      body.name = titleize(body.name)
-
-      // Encrip password
-      body.password = await bcrypt.hash(password, 10)
+      // Put the first letter of name in capital ans encrip password
+      const hashPassword = await bcrypt.hash(password, 10)
+      req.body = Object.assign(body, { name: titleize(name), password: hashPassword })
 
       // Create new user
-      const user: UserInterface = await User.create(req.body)
+      const user: UserInterface = await User.create(body)
 
       // Generate a new token
       const token = generateToken(user.id)
 
       return res.status(200).json({ user, token })
     } catch (error) {
+      // console.error(error.message)
       return res.status(500).json('Server Error')
     }
   }
