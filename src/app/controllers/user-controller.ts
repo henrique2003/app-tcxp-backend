@@ -4,7 +4,7 @@ import UserInterface from '../models/user/protocols'
 import { Request, Response } from 'express'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields, titleize } from '../../utils'
-import { missingParamError, invalidFieldError, fieldInUse } from '../Errors'
+import { missingParamError, invalidFieldError, fieldInUse, serverError } from '../Errors'
 
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -57,7 +57,7 @@ class UserController {
       return res.status(200).json({ user, token })
     } catch (error) {
       // console.error(error.message)
-      return res.status(500).json('Server Error')
+      return res.status(500).json(serverError())
     }
   }
 
