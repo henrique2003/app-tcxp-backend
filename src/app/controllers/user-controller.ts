@@ -4,7 +4,7 @@ import UserInterface from '../models/user/protocols'
 import { Request, Response } from 'express'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields, titleize } from '../../utils'
-import { missingParamError, invalidFieldError } from '../Errors'
+import { missingParamError, invalidFieldError, fieldInUse } from '../Errors'
 
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -41,7 +41,7 @@ class UserController {
 
       // Valid id email alredy in use
       if (await User.findOne({ email })) {
-        return res.status(400).json('Email em uso')
+        return res.status(400).json(fieldInUse('email'))
       }
 
       // Put the first letter of name in capital ans encrip password
