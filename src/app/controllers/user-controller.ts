@@ -63,11 +63,12 @@ class UserController {
 
   public async update (req: Request, res: Response): Promise<Response> {
     try {
-      const { password } = req.body
+      const { body, userId } = req
+      const { password } = body
 
-      req.body = cleanFields(req.body)
+      req.body = cleanFields(body)
 
-      const lastUser = await User.findById(req.userId)
+      const lastUser = await User.findById(userId)
 
       if (!lastUser) {
         return res.status(400).json('Usuário não encontrado')
@@ -87,7 +88,7 @@ class UserController {
 
       for (const field of validFields) {
         const fieldUser: any = lastUser
-        if (field) fieldUser[field] = req.body[field]
+        if (field) fieldUser[field] = body[field]
       }
 
       if (password) lastUser.password = await bcrypt.hash(password, 10)
