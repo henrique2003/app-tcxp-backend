@@ -123,7 +123,7 @@ class UserController {
 
       return res.status(200).json('Deletado com sucesso')
     } catch (error) {
-      return res.status(500).json('Server Error')
+      return res.status(500).json(serverError())
     }
   }
 }
