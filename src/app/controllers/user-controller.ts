@@ -5,6 +5,7 @@ import validator from 'validator'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields, titleize } from '../../utils'
 import { missingParamError } from '../Errors/missing-param-error'
+import { invalidFieldError } from '../Errors/invalid-field-error'
 
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -31,12 +32,12 @@ class UserController {
 
       // Valid passwordConfirmation
       if (password !== passwordConfirmation) {
-        return res.status(400).json('Campo confirmar email inválido')
+        return res.status(400).json(invalidFieldError('confirmar email'))
       }
 
       // Valid if is a email
       if (!validator.isEmail(email)) {
-        return res.status(400).json('Email inválido')
+        return res.status(400).json(invalidFieldError('email'))
       }
 
       // Valid id email alredy in use
