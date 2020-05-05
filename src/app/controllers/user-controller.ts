@@ -4,7 +4,7 @@ import UserInterface from '../models/user/protocols'
 import { Request, Response } from 'express'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields, titleize } from '../../utils'
-import { missingParamError, invalidFieldError, fieldInUse, serverError } from '../Errors'
+import { missingParamError, invalidFieldError, fieldInUse, serverError, userNotFound } from '../Errors'
 
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -71,7 +71,7 @@ class UserController {
       const lastUser = await User.findById(userId)
 
       if (!lastUser) {
-        return res.status(400).json('Usuário não encontrado')
+        return res.status(400).json(userNotFound())
       }
 
       const validFields = [
