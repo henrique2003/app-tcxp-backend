@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import { hash } from 'bcrypt'
 import validator from 'validator'
 import UserInterface from '../models/user/protocols'
 import { Request, Response } from 'express'
@@ -45,7 +45,7 @@ class UserController {
       }
 
       // Put the first letter of name in capital ans encrip password
-      const hashPassword = await bcrypt.hash(password, 10)
+      const hashPassword = await hash(password, 10)
       req.body = Object.assign(body, { name: titleize(name), password: hashPassword })
 
       // Create new user
@@ -91,7 +91,7 @@ class UserController {
         if (field) fieldUser[field] = body[field]
       }
 
-      if (password) lastUser.password = await bcrypt.hash(password, 10)
+      if (password) lastUser.password = await hash(password, 10)
 
       const user: UserInterface = await lastUser.save()
 
