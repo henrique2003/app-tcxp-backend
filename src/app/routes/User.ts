@@ -14,6 +14,6 @@ routes.get('/users', auth, UserController.index)
 // Update
 routes.put('/users', auth, userExists, emailConfirmation, UserController.update)
 // Destroy
-routes.delete('/users', auth, userExists, emailConfirmation, UserController.destroy)
+routes.delete('/users', auth, userExists, UserController.destroy)
 
 export default routes
