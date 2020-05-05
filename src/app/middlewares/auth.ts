@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { verify } from 'jsonwebtoken'
-import configAuth from '../../config/configAuth'
+import configAuth from '../../config/config'
 
 interface Decoded {
   id: string
