@@ -17,7 +17,7 @@ class UserController {
   public async store (req: Request, res: Response): Promise<Response> {
     try {
       const { body } = req
-      const { password, email, name } = body
+      const { password, email, name, passwordConfirmation } = body
 
       // Clean fields
       req.body = cleanFields(body)
@@ -26,6 +26,11 @@ class UserController {
       const requiredFields = ['name', 'password', 'passwordConfirmation', 'email']
       if (!isValidFields(requiredFields, body)) {
         return res.status(400).json('Campos em branco')
+      }
+
+      // Valid passwordConfirmation
+      if (password !== passwordConfirmation) {
+        return res.status(400).json('Campo confirmar email inválido')
       }
 
       // Valid if is a email
