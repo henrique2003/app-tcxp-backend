@@ -9,7 +9,6 @@
     "@types/cors": "^2.8.6",
     "@types/express-serve-static-core": "^4.17.5",
     "@types/helmet": "^0.0.46",
-    "@types/jest": "^25.2.1",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/mongoose": "^5.7.15",
     "@types/mongoose-paginate": "^5.0.8",
@@ -27,6 +26,7 @@
     "husky": "^4.2.5",
     "jest": "^26.0.0",
     "lint-staged": "^10.2.2",
+    "npm-check": "^5.9.2",
     "supertest": "^4.0.2",
     "ts-jest": "^25.4.0",
     "ts-node": "^8.10.1",
@@ -35,13 +35,7 @@
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts --watch",
-    "start": "node ./dist/server.js",
-    "test": "jest --silent --noStackTrace --passWithNoTests --runInBand",
-    "test:verbode": "npm jest -- --passWithNoTests --runInBand",
-    "test:unit": "npm test -- --watchAll -c jest-config-unit.js",
-    "test:integration": "npm test -- --watchAll -c jest-config-integration.js",
-    "test:staged": "jest --passWithNoTests",
-    "test:ci": "npm test -- --coverage"
+    "start": "node ./dist/server.js"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
