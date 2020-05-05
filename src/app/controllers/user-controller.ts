@@ -27,18 +27,18 @@ class UserController {
         return res.status(400).json('Campos em branco')
       }
 
-      // Put the first letter of name in capital
-      req.body.name = titleize(req.body.name)
-
       // Valid if is a email
       if (!validator.isEmail(email)) {
         return res.status(400).json('Email inválido')
       }
 
-      // Valid id email alredy exists
+      // Valid id email alredy in use
       if (await User.findOne({ email })) {
         return res.status(400).json('Email em uso')
       }
+
+      // Put the first letter of name in capital
+      req.body.name = titleize(req.body.name)
 
       // Encrip password
       req.body.password = await bcrypt.hash(password, 10)
