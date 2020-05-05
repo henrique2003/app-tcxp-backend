@@ -16,14 +16,15 @@ class UserController {
 
   public async store (req: Request, res: Response): Promise<Response> {
     try {
-      const { password, email } = req.body
+      const { body } = req
+      const { password, email } = body
 
       // Clean fields
-      req.body = cleanFields(req.body)
+      req.body = cleanFields(body)
 
       // Verify if fields exists
       const requiredFields = ['name', 'password', 'passwordConfirmation', 'email']
-      if (!isValidFields(requiredFields, req.body)) {
+      if (!isValidFields(requiredFields, body)) {
         return res.status(400).json('Campos em branco')
       }
 
@@ -38,10 +39,10 @@ class UserController {
       }
 
       // Put the first letter of name in capital
-      req.body.name = titleize(req.body.name)
+      body.name = titleize(body.name)
 
       // Encrip password
-      req.body.password = await bcrypt.hash(password, 10)
+      body.password = await bcrypt.hash(password, 10)
 
       // Create new user
       const user: UserInterface = await User.create(req.body)
