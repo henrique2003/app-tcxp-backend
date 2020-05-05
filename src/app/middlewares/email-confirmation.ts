@@ -10,6 +10,6 @@ export const emailConfirmation = async (req: Request, res: Response, next: NextF
 
     next()
   } catch (error) {
-    return res.status(500).json(serverError)
+    return res.status(500).json(serverError())
   }
 }

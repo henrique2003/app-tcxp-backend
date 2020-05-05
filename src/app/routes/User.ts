@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import UserController from '../controllers/user-controller'
-import { auth, emailConfirmation, userExists } from '../middlewares'
+import { auth, emailConfirmation } from '../middlewares'
 
 const routes = Router()
 
@@ -12,8 +12,8 @@ routes.get('/user/:id', UserController.show)
 // Index
 routes.get('/users', auth, UserController.index)
 // Update
-routes.put('/users', auth, userExists, emailConfirmation, UserController.update)
+routes.put('/users', auth, emailConfirmation, UserController.update)
 // Destroy
-routes.delete('/users', auth, userExists, UserController.destroy)
+routes.delete('/users', auth, UserController.destroy)
 
 export default routes
