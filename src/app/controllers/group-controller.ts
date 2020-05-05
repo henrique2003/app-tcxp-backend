@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
-import { PaginateOptions } from 'mongoose'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -14,7 +13,7 @@ class GroupsController {
         limit: 10
       }
 
-      const groups = await Groups.paginate({ completed: true }, options) as PaginateOptions
+      const groups = await Groups.paginate({ completed: true }, options)
 
       return res.status(200).json(groups)
     } catch (error) {

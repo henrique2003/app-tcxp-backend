@@ -4,7 +4,7 @@ require('dotenv').config()
 class Db {
   public async connectDb (): Promise<void> {
     try {
-      await connect(process.env.MONGO_URL, {
+      await connect('mongodb://localhost:27017/app-viagem', {
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true

@@ -1,4 +1,4 @@
-import UserInterface from '../models/User/Interface'
+import UserInterface from '../models/user/protocols'
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import validator from 'validator'
@@ -8,9 +8,7 @@ import { generateToken, isValidFields, cleanFields, titleize } from '../../utils
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
     try {
-      const users = await User.find()
-
-      return res.status(200).json(users)
+      return res.status(200).json(await User.find())
     } catch (error) {
       return res.status(500).json('Server error')
     }
@@ -24,7 +22,7 @@ class UserController {
       req.body = cleanFields(req.body)
 
       // Verify if fields exists
-      const requiredFields = ['name', 'password', 'email']
+      const requiredFields = ['name', 'password', 'passwordConfirmation', 'email']
       if (!isValidFields(requiredFields, req.body)) {
         return res.status(400).json('Campos em branco')
       }

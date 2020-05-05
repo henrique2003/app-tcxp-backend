@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 import { mongoosePagination } from 'ts-mongoose-pagination'
-import PaginateResult from './interface'
+import { PaginateResult } from './protocols'
 
 const GroupsSchema = new Schema({
   messages: [{

@@ -1,7 +1,7 @@
 import { Document } from 'mongoose'
-import { GroupsDocsInterface } from '../Groups/interface'
+import { GroupsDocs } from '../groups/protocols'
 
-export default interface UserInterface extends Document {
+export default interface User extends Document {
   name: string
   password: string
   email: string
@@ -20,6 +20,6 @@ export default interface UserInterface extends Document {
 }
 
 interface InviteGroup {
-  user: UserInterface
-  Group: GroupsDocsInterface
+  user: User
+  Group: GroupsDocs
 }
