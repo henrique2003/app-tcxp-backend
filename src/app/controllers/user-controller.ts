@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import validator from 'validator'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields, titleize } from '../../utils'
+import { missingParamError } from '../Errors/missing-param-error'
 
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -25,7 +26,7 @@ class UserController {
       // Verify if fields exists
       const requiredFields = ['name', 'password', 'passwordConfirmation', 'email']
       if (!isValidFields(requiredFields, body)) {
-        return res.status(400).json('Campos em branco')
+        return res.status(400).json(missingParamError())
       }
 
       // Valid passwordConfirmation
