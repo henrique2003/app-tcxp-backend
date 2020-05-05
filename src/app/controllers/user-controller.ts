@@ -109,7 +109,7 @@ class UserController {
 
       const user = await User.findById(id)
 
-      if (!user) return res.status(400).json('Usuário não encontrado')
+      if (!user) return res.status(400).json(userNotFound())
 
       return res.status(200).json(user)
     } catch (error) {
