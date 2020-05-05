@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { compare } from 'bcrypt'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields } from '../../utils'
+import { serverError } from '../Errors'
 
 class AuthController {
   public async login (req: Request, res: Response): Promise<Response> {
@@ -26,7 +27,7 @@ class AuthController {
 
       return res.status(200).json({ user, token: generateToken(user.id) })
     } catch (error) {
-      return res.status(500).json('Server Error')
+      return res.status(500).json(serverError())
     }
   }
 
