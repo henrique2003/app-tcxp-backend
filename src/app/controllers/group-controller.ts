@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
 import { serverError, missingParamError, fieldInUse, notFound } from '../errors'
+import { responseWithToken } from '../helpers'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -24,15 +25,15 @@ class GroupsController {
 
   public async mine (req: Request, res: Response): Promise<Response> {
     try {
-      const id = req.userId
+      const { userId, newToken } = req
 
-      const creatorGroup = await Groups.find({ creator: id })
-      const adminGroup = await Groups.find({ administrators: id })
-      const memberGroup = await Groups.find({ members: id })
+      const creatorGroup = await Groups.find({ creator: userId })
+      const adminGroup = await Groups.find({ administrators: userId })
+      const memberGroup = await Groups.find({ members: userId })
 
       const groups = { creatorGroup, adminGroup, memberGroup }
 
-      return res.status(200).json(groups)
+      return res.status(200).json(responseWithToken(groups, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -40,7 +41,7 @@ class GroupsController {
 
   public async store (req: Request, res: Response): Promise<Response> {
     try {
-      const { body, userId } = req
+      const { body, userId, newToken } = req
       req.body = cleanFields(body)
 
       const requiredFields = ['title', 'description']
@@ -54,9 +55,9 @@ class GroupsController {
 
       body.creator = await User.findById(userId)
 
-      const groups = await Groups.create(body)
+      const group = await Groups.create(body)
 
-      return res.status(200).json(groups)
+      return res.status(200).json(responseWithToken(group, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }

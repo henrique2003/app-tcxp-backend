@@ -9,8 +9,6 @@ const routes = Router()
 routes.post('/users', UserController.store)
 // Show
 routes.get('/user/:id', UserController.show)
-// Index
-routes.get('/users', auth, UserController.index)
 // Update
 routes.put('/users', auth, emailConfirmation, UserController.update)
 // Destroy

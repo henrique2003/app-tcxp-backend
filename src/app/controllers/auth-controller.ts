@@ -3,7 +3,7 @@ import { compare } from 'bcrypt'
 import { User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
 import { serverError, missingParamError } from '../errors'
-import { generateToken } from '../helpers'
+import { generateToken, responseWithToken } from '../helpers'
 
 class AuthController {
   public async login (req: Request, res: Response): Promise<Response> {
@@ -26,7 +26,7 @@ class AuthController {
 
       Object.assign({}, user, { password: undefined })
 
-      return res.status(200).json({ user, token: generateToken(user.id) })
+      return res.status(200).json(responseWithToken(user, generateToken(user.id)))
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -37,7 +37,7 @@ class AuthController {
       const { userId, newToken } = req
       const user = await User.findById(userId)
 
-      return res.status(200).json(newToken ? { user, newToken } : { user })
+      return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }

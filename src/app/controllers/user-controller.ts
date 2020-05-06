@@ -4,18 +4,10 @@ import UserInterface from '../models/user/protocols'
 import { Request, Response } from 'express'
 import { User } from '../models'
 import { isValidFields, cleanFields, titleize } from '../../utils'
-import { generateToken } from '../helpers'
+import { generateToken, responseWithToken } from '../helpers'
 import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../errors'
 
 class UserController {
-  public async index (req: Request, res: Response): Promise<Response> {
-    try {
-      return res.status(200).json(await User.find({}))
-    } catch (error) {
-      return res.status(500).json(serverError())
-    }
-  }
-
   public async store (req: Request, res: Response): Promise<Response> {
     try {
       const { body } = req
@@ -64,7 +56,7 @@ class UserController {
 
   public async update (req: Request, res: Response): Promise<Response> {
     try {
-      const { body, userId } = req
+      const { body, userId, newToken } = req
       const { password } = body
 
       req.body = cleanFields(body)
@@ -96,7 +88,7 @@ class UserController {
 
       const user: UserInterface = await lastUser.save()
 
-      return res.status(200).json(user)
+      return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }
