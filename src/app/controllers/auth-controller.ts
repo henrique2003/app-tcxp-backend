@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { compare } from 'bcrypt'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields } from '../../utils'
-import { serverError, missingParamError } from '../Errors'
+import { serverError, missingParamError } from '../errors'
 
 class AuthController {
   public async login (req: Request, res: Response): Promise<Response> {

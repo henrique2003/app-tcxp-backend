@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { User } from '../models'
-import { serverError } from '../Errors'
+import { serverError } from '../errors'
 
 export const emailConfirmation = async (req: Request, res: Response, next: NextFunction) => {
   try {

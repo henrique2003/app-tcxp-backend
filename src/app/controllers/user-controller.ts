@@ -4,7 +4,7 @@ import UserInterface from '../models/user/protocols'
 import { Request, Response } from 'express'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields, titleize } from '../../utils'
-import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../Errors'
+import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../errors'
 
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {

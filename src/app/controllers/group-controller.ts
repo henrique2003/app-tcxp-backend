@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
-import { serverError, missingParamError, fieldInUse, notFound } from '../Errors'
+import { serverError, missingParamError, fieldInUse, notFound } from '../errors'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
