@@ -15,9 +15,9 @@ class GroupsController {
         limit: 10
       }
 
-      const groups = await Groups.paginate({ completed: true }, options)
+      const groups = await Groups.paginate({}, options)
 
-      return res.status(200).json(groups)
+      return res.status(200).json({ body: groups })
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -69,7 +69,7 @@ class GroupsController {
 
       if (!group) return res.status(400).json(notFound('Grupo'))
 
-      return res.status(200).json(group)
+      return res.status(200).json({ body: group })
     } catch (error) {
       return res.status(500).json(serverError())
     }
