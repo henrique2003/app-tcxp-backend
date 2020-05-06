@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
+import { serverError } from '../Errors'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -17,7 +18,7 @@ class GroupsController {
 
       return res.status(200).json(groups)
     } catch (error) {
-      return res.status(500).json(error)
+      return res.status(500).json(serverError())
     }
   }
 
@@ -33,7 +34,7 @@ class GroupsController {
 
       return res.status(200).json(groups)
     } catch (error) {
-      return res.status(500).json('Server Error')
+      return res.status(500).json(serverError())
     }
   }
 
@@ -56,7 +57,7 @@ class GroupsController {
 
       return res.status(200).json(groups)
     } catch (error) {
-      return res.status(500).json(error)
+      return res.status(500).json(serverError())
     }
   }
 
@@ -68,7 +69,7 @@ class GroupsController {
 
       return res.status(200).json(group)
     } catch (error) {
-      return res.status(500).json('Server Error')
+      return res.status(500).json(serverError())
     }
   }
 }
