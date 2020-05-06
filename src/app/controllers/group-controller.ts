@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
-import { serverError, missingParamError } from '../Errors'
+import { serverError, missingParamError, fieldInUse } from '../Errors'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -49,7 +49,7 @@ class GroupsController {
       }
 
       if (await Groups.findOne({ title: body.title })) {
-        return res.status(400).json('Nome de grupo em uso')
+        return res.status(400).json(fieldInUse('Nome do grupo'))
       }
 
       body.creator = await User.findById(userId)
