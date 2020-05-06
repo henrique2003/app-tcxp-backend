@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import { compare } from 'bcrypt'
 import { User } from '../models'
-import { generateToken, isValidFields, cleanFields } from '../../utils'
+import { isValidFields, cleanFields } from '../../utils'
 import { serverError, missingParamError } from '../errors'
+import { generateToken } from '../helpers'
 
 class AuthController {
   public async login (req: Request, res: Response): Promise<Response> {

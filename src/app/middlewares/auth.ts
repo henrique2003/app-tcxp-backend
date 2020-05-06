@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { verify, decode } from 'jsonwebtoken'
 import configAuth from '../../config/config'
 import { User } from '../models/user'
-import { generateToken } from '../../utils/generate-token'
+import { generateToken } from '../helpers'
 
 interface Decoded {
   id: string

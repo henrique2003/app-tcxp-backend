@@ -3,7 +3,8 @@ import validator from 'validator'
 import UserInterface from '../models/user/protocols'
 import { Request, Response } from 'express'
 import { User } from '../models'
-import { generateToken, isValidFields, cleanFields, titleize } from '../../utils'
+import { isValidFields, cleanFields, titleize } from '../../utils'
+import { generateToken } from '../helpers'
 import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../errors'
 
 class UserController {
