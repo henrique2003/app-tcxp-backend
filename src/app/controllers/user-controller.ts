@@ -57,7 +57,7 @@ class UserController {
   public async update (req: Request, res: Response): Promise<Response> {
     try {
       const { body, userId, newToken } = req
-      const { password } = body
+      const { password, rememberMe } = body
 
       req.body = cleanFields(body)
 
@@ -79,14 +79,23 @@ class UserController {
         'twitter'
       ]
 
+      const fieldsUser: any = lastUser
       for (const field of validFields) {
-        const fieldUser: any = lastUser
-        if (field) fieldUser[field] = body[field]
+        if (field) fieldsUser[field] = body[field]
       }
+
+      if (rememberMe) fieldsUser.rememberMe = true
+      else fieldsUser.rememberMe = false
 
       if (password) lastUser.password = await hash(password, 10)
 
-      const user: UserInterface = await lastUser.save()
+      const user = await User.findByIdAndUpdate({
+        _id: userId
+      }, {
+        $set: fieldsUser
+      }, {
+        upsert: true
+      })
 
       return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
