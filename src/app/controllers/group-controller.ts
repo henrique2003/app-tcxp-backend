@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
-import { serverError } from '../Errors'
+import { serverError, missingParamError } from '../Errors'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -45,7 +45,7 @@ class GroupsController {
 
       const requiredFields = ['title', 'description']
       if (!isValidFields(requiredFields, body)) {
-        return res.status(400).json('Campo em branco')
+        return res.status(400).json(missingParamError())
       }
 
       if (await Groups.findOne({ title: body.title })) {
