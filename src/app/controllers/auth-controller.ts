@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { compare } from 'bcrypt'
 import { User } from '../models'
 import { generateToken, isValidFields, cleanFields } from '../../utils'
-import { serverError } from '../Errors'
+import { serverError, missingParamError } from '../Errors'
 
 class AuthController {
   public async login (req: Request, res: Response): Promise<Response> {
@@ -14,7 +14,7 @@ class AuthController {
 
       const requiredFields = ['email', 'password']
       if (!isValidFields(requiredFields, body)) {
-        return res.status(400).json('Campo em branco')
+        return res.status(400).json(missingParamError())
       }
 
       const user = await User.findOne({ email }).select('+password')
