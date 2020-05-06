@@ -14,7 +14,7 @@ class UserController {
       const { password, email, name, passwordConfirmation } = body
 
       // Clean fields
-      req.body = cleanFields({ name, email, password, passwordConfirmation })
+      req.body = cleanFields(body)
 
       // Verify if fields exists
       const requiredFields = ['name', 'password', 'passwordConfirmation', 'email']
