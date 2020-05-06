@@ -11,7 +11,7 @@ class UserController {
     try {
       return res.status(200).json(await User.find())
     } catch (error) {
-      return res.status(500).json('Server error')
+      return res.status(500).json(serverError())
     }
   }
 
@@ -113,7 +113,7 @@ class UserController {
 
       return res.status(200).json(user)
     } catch (error) {
-      return res.status(500).json('Server Error')
+      return res.status(500).json(serverError())
     }
   }
 
