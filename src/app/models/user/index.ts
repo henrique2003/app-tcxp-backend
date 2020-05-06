@@ -19,6 +19,10 @@ const UserSchema = new Schema({
   state: String,
   city: String,
   celphone: String,
+  rememberMe: {
+    type: Boolean,
+    default: false
+  },
   invites: [{
     user: {
       type: 'ObjectId',

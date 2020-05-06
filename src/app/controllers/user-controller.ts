@@ -9,7 +9,7 @@ import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound
 class UserController {
   public async index (req: Request, res: Response): Promise<Response> {
     try {
-      return res.status(200).json(await User.find())
+      return res.status(200).json(await User.find({}))
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -21,7 +21,7 @@ class UserController {
       const { password, email, name, passwordConfirmation } = body
 
       // Clean fields
-      req.body = cleanFields(body)
+      req.body = cleanFields({ name, email, password, passwordConfirmation })
 
       // Verify if fields exists
       const requiredFields = ['name', 'password', 'passwordConfirmation', 'email']
@@ -56,7 +56,7 @@ class UserController {
 
       return res.status(200).json({ user, token })
     } catch (error) {
-      // console.error(error.message)
+      console.error(error.message)
       return res.status(500).json(serverError())
     }
   }
