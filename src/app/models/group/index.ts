@@ -3,28 +3,6 @@ import { mongoosePagination } from 'ts-mongoose-pagination'
 import { PaginateResult } from './protocols'
 
 const GroupsSchema = new Schema({
-  messages: [{
-    userName: {
-      type: String,
-      required: true
-    },
-    content: {
-      type: String,
-      required: true
-    }
-  }],
-  creator: {
-    type: 'ObjectId',
-    ref: 'User'
-  },
-  administrators: [{
-    type: 'ObjectId',
-    ref: 'User'
-  }],
-  members: [{
-    type: 'ObjectId',
-    ref: 'User'
-  }],
   title: {
     type: String,
     required: true
@@ -39,6 +17,28 @@ const GroupsSchema = new Schema({
     originalName: String,
     url: String
   },
+  creator: {
+    type: 'ObjectId',
+    ref: 'User'
+  },
+  administrators: [{
+    type: 'ObjectId',
+    ref: 'User'
+  }],
+  members: [{
+    type: 'ObjectId',
+    ref: 'User'
+  }],
+  messages: [{
+    userName: {
+      type: String,
+      required: true
+    },
+    content: {
+      type: String,
+      required: true
+    }
+  }],
   completed: {
     type: Boolean,
     default: false

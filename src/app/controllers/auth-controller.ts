@@ -33,9 +33,10 @@ class AuthController {
 
   public async loadUser (req: Request, res: Response): Promise<Response> {
     try {
-      const user = await User.findById(req.userId)
+      const { userId, newToken } = req
+      const user = await User.findById(userId)
 
-      return res.status(200).json(user)
+      return res.status(200).json(newToken ? { user, newToken } : { user })
     } catch (error) {
       return res.status(500).json(serverError())
     }
