@@ -40,20 +40,21 @@ class GroupsController {
 
   public async store (req: Request, res: Response): Promise<Response> {
     try {
-      req.body = cleanFields(req.body)
+      const { body, userId } = req
+      req.body = cleanFields(body)
 
       const requiredFields = ['title', 'description']
-      if (!isValidFields(requiredFields, req.body)) {
+      if (!isValidFields(requiredFields, body)) {
         return res.status(400).json('Campo em branco')
       }
 
-      if (await Groups.findOne({ title: req.body.title })) {
+      if (await Groups.findOne({ title: body.title })) {
         return res.status(400).json('Nome de grupo em uso')
       }
 
-      req.body.creator = await User.findById(req.userId)
+      body.creator = await User.findById(userId)
 
-      const groups = await Groups.create(req.body)
+      const groups = await Groups.create(body)
 
       return res.status(200).json(groups)
     } catch (error) {
