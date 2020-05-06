@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
-import { serverError, missingParamError, fieldInUse } from '../Errors'
+import { serverError, missingParamError, fieldInUse, notFound } from '../Errors'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -66,7 +66,7 @@ class GroupsController {
     try {
       const group = await Groups.findById(req.params.id).populate('creator administrators members')
 
-      if (!group) return res.status(400).json('Grupo não encontrado')
+      if (!group) return res.status(400).json(notFound('Grupo'))
 
       return res.status(200).json(group)
     } catch (error) {
