@@ -19,31 +19,46 @@ const UserSchema = new Schema({
   state: String,
   city: String,
   celphone: String,
+  facebook: String,
+  twitter: String,
+  instagram: String,
   rememberMe: {
     type: Boolean,
     default: false
   },
-  invites: [{
-    user: {
+  invitesRequest: [{
+    to: {
       type: 'ObjectId',
-      ref: 'User'
+      ref: 'User',
+      select: false
+    },
+    from: {
+      type: 'ObjectId',
+      ref: 'User',
+      select: false
     },
     group: {
       type: 'ObjectId',
-      ref: 'Groups'
-    },
-    select: false
+      ref: 'Groups',
+      select: false
+    }
   }],
-  receivedRequests: [{
-    user: {
+  receivedRequest: [{
+    to: {
       type: 'ObjectId',
-      ref: 'User'
+      ref: 'User',
+      select: false
+    },
+    from: {
+      type: 'ObjectId',
+      ref: 'User',
+      select: false
     },
     group: {
       type: 'ObjectId',
-      ref: 'Groups'
-    },
-    select: false
+      ref: 'Groups',
+      select: false
+    }
   }],
   askRequests: [{
     user: {
@@ -56,9 +71,6 @@ const UserSchema = new Schema({
     },
     select: false
   }],
-  facebook: String,
-  twitter: String,
-  instagram: String,
   emailConfirmation: {
     type: Boolean,
     default: false
