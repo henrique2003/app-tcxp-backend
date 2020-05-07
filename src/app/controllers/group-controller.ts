@@ -77,15 +77,15 @@ class GroupsController {
 
   public async invite (req: Request, res: Response): Promise<Response> {
     try {
-      // const { body, userId, newToken } = req
+      const { body, newToken } = req
       // const { from, group } = body
 
-      // req.body = cleanFields(body)
+      req.body = cleanFields(body)
 
-      // const requiredFields = ['from', 'group']
-      // if (!isValidFields(requiredFields, body)) {
-      //   return res.status(400).json(missingParamError())
-      // }
+      const requiredFields = ['from', 'group']
+      if (!isValidFields(requiredFields, body)) {
+        return res.status(400).json(missingParamError())
+      }
 
       // const isFrom = await User.findById(from)
       // if (!isFrom) {
@@ -112,7 +112,7 @@ class GroupsController {
       // invitar na propria pessoa que mandar o convite
       // por na request da pessoa que recebe o convite
 
-      return res.status(200).json(responseWithToken(null, req.newToken))
+      return res.status(200).json(responseWithToken(null, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }
