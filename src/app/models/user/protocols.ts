@@ -16,8 +16,8 @@ export default interface User extends Document {
   twitter?: string
   instagram?: string
   rememberMe?: boolean
-  invitesRequest?: InviteGroup[]
-  receivedRequest?: InviteGroup[]
+  invitesRequest: InviteGroup[]
+  receivedRequest: InviteGroup[]
 }
 
 interface InviteGroup {

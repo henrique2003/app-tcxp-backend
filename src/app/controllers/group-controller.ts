@@ -74,6 +74,49 @@ class GroupsController {
       return res.status(500).json(serverError())
     }
   }
+
+  public async invite (req: Request, res: Response): Promise<Response> {
+    try {
+      // const { body, userId, newToken } = req
+      // const { from, group } = body
+
+      // req.body = cleanFields(body)
+
+      // const requiredFields = ['from', 'group']
+      // if (!isValidFields(requiredFields, body)) {
+      //   return res.status(400).json(missingParamError())
+      // }
+
+      // const isFrom = await User.findById(from)
+      // if (!isFrom) {
+      //   return res.status(404).json(notFound('Destinatário'))
+      // }
+
+      // const isGroup = await Groups.findById(group)
+      // if (!isGroup) {
+      //   return res.status(404).json(notFound('Grupo'))
+      // }
+
+      // // Pick user
+      // const userTo = await User.findById(userId)
+      // console.log(userTo)
+      // const invite = {
+      //   to: userTo,
+      //   from: isFrom,
+      //   group: isGroup
+      // }
+
+      // userTo.invitesRequest.push(invite)
+
+      // const inviteRes = await userTo.save()
+      // invitar na propria pessoa que mandar o convite
+      // por na request da pessoa que recebe o convite
+
+      return res.status(200).json(responseWithToken(null, req.newToken))
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
 }
 
 export default new GroupsController()

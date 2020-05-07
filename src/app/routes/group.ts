@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { GroupController } from '../controllers'
-import { auth, emailConfirmation } from '../middlewares'
+import { auth, emailConfirmation, isInGroup } from '../middlewares'
 
 const routes = Router()
 
@@ -12,5 +12,7 @@ routes.post('/groups', auth, emailConfirmation, GroupController.store)
 routes.get('/groups/mine', auth, emailConfirmation, GroupController.mine)
 // Show especify group
 routes.get('/group/:id', GroupController.show)
+// Inivite request
+routes.post('/groups/invite', auth, emailConfirmation, isInGroup, GroupController.invite)
 
 export default routes
