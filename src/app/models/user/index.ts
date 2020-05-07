@@ -60,17 +60,6 @@ const UserSchema = new Schema({
       select: false
     }
   }],
-  askRequests: [{
-    user: {
-      type: 'ObjectId',
-      ref: 'User'
-    },
-    group: {
-      type: 'ObjectId',
-      ref: 'Groups'
-    },
-    select: false
-  }],
   emailConfirmation: {
     type: Boolean,
     default: false
