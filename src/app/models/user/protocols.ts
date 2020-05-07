@@ -16,12 +16,17 @@ export default interface User extends Document {
   twitter?: string
   instagram?: string
   rememberMe?: boolean
-  invitesRequest: InviteGroup[]
-  receivedRequest: InviteGroup[]
+  inviteRequest: InviteRequest[]
+  receivedRequest: ReceiveRequest[]
 }
 
-interface InviteGroup {
+interface InviteRequest {
   to: User
+  from: User
+  group: Group
+}
+
+interface ReceiveRequest {
   from: User
   group: Group
 }

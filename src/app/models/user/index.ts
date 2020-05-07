@@ -26,38 +26,28 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-  invitesRequest: [{
+  inviteRequest: [{
     to: {
       type: 'ObjectId',
-      ref: 'User',
-      select: false
+      ref: 'User'
     },
     from: {
       type: 'ObjectId',
-      ref: 'User',
-      select: false
+      ref: 'User'
     },
     group: {
       type: 'ObjectId',
-      ref: 'Groups',
-      select: false
+      ref: 'Groups'
     }
   }],
   receivedRequest: [{
     to: {
       type: 'ObjectId',
-      ref: 'User',
-      select: false
-    },
-    from: {
-      type: 'ObjectId',
-      ref: 'User',
-      select: false
+      ref: 'User'
     },
     group: {
       type: 'ObjectId',
-      ref: 'Groups',
-      select: false
+      ref: 'Groups'
     }
   }],
   emailConfirmation: {

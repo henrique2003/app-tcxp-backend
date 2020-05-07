@@ -78,7 +78,7 @@ class GroupsController {
 
   public async invite (req: Request, res: Response): Promise<Response> {
     try {
-      const { body, newToken } = req
+      const { body, newToken, userId } = req
       const { from, group } = body
 
       req.body = cleanFields(body)
@@ -104,21 +104,23 @@ class GroupsController {
       }
 
       // // Pick user
-      // const userTo = await User.findById(userId)
-      // console.log(userTo)
-      // const invite = {
-      //   to: userTo,
-      //   from: isFrom,
-      //   group: isGroup
-      // }
+      const userTo: any = await User.findById(userId)
 
-      // userTo.invitesRequest.push(invite)
+      const invite = {
+        to: userTo,
+        from: isFrom,
+        group: isGroup
+      }
 
-      // const inviteRes = await userTo.save()
+      userTo.inviteRequest.push(invite)
+
+      await userTo.save()
+      const inviteRes = await User.findById(userId).populate('inviteRequest.to inviteRequest.from inviteRequest.group')
       // invitar na propria pessoa que mandar o convite
+      // validar se ja existe um convite igual
       // por na request da pessoa que recebe o convite
 
-      return res.status(200).json(responseWithToken(isFrom, newToken))
+      return res.status(200).json(responseWithToken(inviteRes, newToken))
     } catch (error) {
       console.error(error.message)
       return res.status(500).json(serverError())
