@@ -3,6 +3,7 @@ import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
 import { serverError, missingParamError, fieldInUse, notFound } from '../errors'
 import { responseWithToken } from '../helpers'
+import { validObjectId } from '../helpers/valid-object-id'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -78,7 +79,7 @@ class GroupsController {
   public async invite (req: Request, res: Response): Promise<Response> {
     try {
       const { body, newToken } = req
-      const { from } = body
+      const { from, group } = body
 
       req.body = cleanFields(body)
 
@@ -87,20 +88,20 @@ class GroupsController {
         return res.status(400).json(missingParamError())
       }
 
-      // Valid object ids
-      if (from.length !== 24) {
-        return res.status(404).json(notFound('Destinatário'))
+      // Valid object id from
+      if (!validObjectId(from)) {
+        return res.status(404).json(notFound('Convite'))
       }
 
       const isFrom = await User.findById(from)
       if (!isFrom) {
-        return res.status(404).json(notFound('Destinatário'))
+        return res.status(404).json(notFound('Convite'))
       }
 
-      // const isGroup = await Groups.findById(group)
-      // if (!isGroup) {
-      //   return res.status(404).json(notFound('Grupo'))
-      // }
+      const isGroup = await Groups.findById(group)
+      if (!isGroup) {
+        return res.status(404).json(notFound('Convite'))
+      }
 
       // // Pick user
       // const userTo = await User.findById(userId)
