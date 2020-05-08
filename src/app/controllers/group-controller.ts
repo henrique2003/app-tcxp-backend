@@ -90,35 +90,37 @@ class GroupsController {
 
       // Valid object id from
       if (!validObjectId(from)) {
-        return res.status(404).json(notFound('Convite'))
+        return res.status(400).json(notFound('Convite'))
       }
 
       const isFrom = await User.findById(from)
       if (!isFrom) {
-        return res.status(404).json(notFound('Convite'))
+        return res.status(400).json(notFound('Convite'))
       }
 
       const isGroup = await Groups.findById(group)
       if (!isGroup) {
-        return res.status(404).json(notFound('Convite'))
+        return res.status(400).json(notFound('Convite'))
       }
 
-      // // Pick user
+      // Pick user to
       const userTo: any = await User.findById(userId)
 
+      // if repeat invite
+      for (const invite of userTo.inviteRequest) {
+        if (invite.from == from && invite.group == group) {
+          return res.status(400).json('Convite já existe')
+        }
+      }
+
       const invite = {
-        to: userTo,
         from: isFrom,
         group: isGroup
       }
 
       userTo.inviteRequest.push(invite)
-
       await userTo.save()
-      const inviteRes = await User.findById(userId).populate('inviteRequest.to inviteRequest.from inviteRequest.group')
-      // invitar na propria pessoa que mandar o convite
-      // validar se ja existe um convite igual
-      // por na request da pessoa que recebe o convite
+      const inviteRes = await User.findById(userId).populate('inviteRequest.from inviteRequest.group')
 
       return res.status(200).json(responseWithToken(inviteRes, newToken))
     } catch (error) {

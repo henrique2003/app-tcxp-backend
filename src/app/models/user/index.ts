@@ -27,10 +27,6 @@ const UserSchema = new Schema({
     default: false
   },
   inviteRequest: [{
-    to: {
-      type: 'ObjectId',
-      ref: 'User'
-    },
     from: {
       type: 'ObjectId',
       ref: 'User'
