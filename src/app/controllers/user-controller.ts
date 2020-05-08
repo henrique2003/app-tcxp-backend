@@ -113,6 +113,9 @@ class UserController {
 
       if (!user) return res.status(400).json(notFound('Usuário'))
 
+      user.inviteRequest = []
+      user.receivedRequest = []
+
       return res.status(200).json({ body: user })
     } catch (error) {
       return res.status(500).json(serverError())
