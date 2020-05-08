@@ -122,9 +122,19 @@ class GroupsController {
       await userTo.save()
       const inviteRes = await User.findById(userId).populate('inviteRequest.from inviteRequest.group')
 
+      // Pick user from
+      const userFrom: any = await User.findById(from)
+
+      const request = {
+        to: userTo,
+        group: isGroup
+      }
+
+      userFrom.receivedRequest.push(request)
+      await userFrom.save()
+
       return res.status(200).json(responseWithToken(inviteRes, newToken))
     } catch (error) {
-      console.error(error.message)
       return res.status(500).json(serverError())
     }
   }
