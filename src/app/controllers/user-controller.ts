@@ -116,6 +116,13 @@ class UserController {
 
       return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
+      if (file) {
+        const s3 = configs.s3
+        s3.deleteObject({
+          Bucket: configs.aws_bucket,
+          Key: file.key
+        }).promise()
+      }
       return res.status(500).json(serverError())
     }
   }
