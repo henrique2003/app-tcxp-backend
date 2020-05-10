@@ -1,6 +1,6 @@
 import { sign } from 'jsonwebtoken'
-import config from '../../config/config'
+import configs from '../../config/config'
 
 export const generateToken = (id: string): string => {
-  return sign({ id }, config.secret, { expiresIn: 86400 })
+  return sign({ id }, configs.secret, { expiresIn: 86400 })
 }

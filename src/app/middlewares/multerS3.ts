@@ -1,17 +1,11 @@
 import multerS3 from 'multer-s3'
 import multer from 'multer'
 import crypto from 'crypto'
-import S3 from 'aws-sdk/clients/s3'
-import { config } from 'dotenv'
-config()
+import configs from '../../config/config'
 
 export default multer({
   storage: multerS3({
-    s3: new S3({
-      accessKeyId: process.env.AWS_KEI_ID,
-      secretAccessKey: process.env.AWS_SECRET_KEY,
-      region: process.env.AWS_DEFAULT_REGION
-    }),
+    s3: configs.s3,
     bucket: 'tcxp-upload',
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: 'public-read',
