@@ -6,7 +6,7 @@ import configs from '../../config/config'
 export default multer({
   storage: multerS3({
     s3: configs.s3,
-    bucket: 'tcxp-upload',
+    bucket: configs.aws_bucket,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: 'public-read',
     key: (req, file, cb) => {

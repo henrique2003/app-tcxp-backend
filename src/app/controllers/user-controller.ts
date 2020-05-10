@@ -56,10 +56,10 @@ class UserController {
   }
 
   public async update (req: Request, res: Response): Promise<Response> {
-    try {
-      const { body, userId, newToken, file } = req
-      const { password, rememberMe } = body
+    const { body, userId, newToken, file } = req
+    const { password, rememberMe } = body
 
+    try {
       req.body = cleanFields(body)
 
       const lastUser = await User.findById(userId)
@@ -96,7 +96,7 @@ class UserController {
         if (fieldsUser.imageProfile) {
           const s3 = configs.s3
           s3.deleteObject({
-            Bucket: 'tcxp-upload',
+            Bucket: configs.aws_bucket,
             Key: fieldsUser.imageProfile.key
           }).promise()
         }
