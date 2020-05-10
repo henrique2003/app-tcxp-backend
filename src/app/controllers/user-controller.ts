@@ -148,7 +148,19 @@ class UserController {
 
   public async destroy (req: Request, res: Response): Promise<Response> {
     try {
-      await User.findByIdAndDelete(req.userId)
+      const id = req.userId
+
+      const user: any = await User.findById(id)
+
+      if (user?.imageProfile) {
+        const s3 = configs.s3
+        s3.deleteObject({
+          Bucket: configs.aws_bucket,
+          Key: user.imageProfile.key
+        }).promise()
+      }
+
+      await User.findByIdAndDelete(id)
 
       return res.status(200).json(deleteSuccess())
     } catch (error) {
