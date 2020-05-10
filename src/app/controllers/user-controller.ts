@@ -6,6 +6,7 @@ import { User } from '../models'
 import { isValidFields, cleanFields, titleize } from '../../utils'
 import { generateToken, responseWithToken } from '../helpers'
 import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../errors'
+import configs from '../../config/config'
 
 class UserController {
   public async store (req: Request, res: Response): Promise<Response> {
@@ -91,6 +92,14 @@ class UserController {
 
       // Upload image
       if (file) {
+        // Delete last image if exists
+        if (fieldsUser.imageProfile) {
+          const s3 = configs.s3
+          s3.deleteObject({
+            Bucket: 'tcxp-upload',
+            Key: fieldsUser.imageProfile.key
+          }).promise()
+        }
         if (file.originalname) fieldsUser.imageProfile.name = file.originalname
         if (file.size) fieldsUser.imageProfile.size = file.size
         if (file.key) fieldsUser.imageProfile.key = file.key
