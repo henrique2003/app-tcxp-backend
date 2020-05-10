@@ -22,6 +22,12 @@ const UserSchema = new Schema({
   facebook: String,
   twitter: String,
   instagram: String,
+  imageProfile: {
+    name: String,
+    size: Number,
+    key: String,
+    url: String
+  },
   rememberMe: {
     type: Boolean,
     default: false

@@ -16,6 +16,12 @@ export default interface User extends Document {
   twitter?: string
   instagram?: string
   rememberMe?: boolean
+  imageProfile: {
+    name: String
+    size: Number
+    key: String
+    url: String
+  }
   inviteRequest: InviteRequest[]
   receivedRequest: ReceiveRequest[]
 }

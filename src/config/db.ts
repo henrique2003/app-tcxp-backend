@@ -3,11 +3,9 @@ import { config } from 'dotenv'
 config()
 
 class Db {
-  private readonly mongo_url = process.env.MONGO_URL ?? 'mongodb://localhost:27017/app-viagem'
-
   public async connectDb (): Promise<void> {
     try {
-      await connect(this.mongo_url, {
+      await connect(process.env.MONGO_URL ?? '', {
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true

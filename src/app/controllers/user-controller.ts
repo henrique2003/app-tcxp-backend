@@ -56,7 +56,7 @@ class UserController {
 
   public async update (req: Request, res: Response): Promise<Response> {
     try {
-      const { body, userId, newToken } = req
+      const { body, userId, newToken, file } = req
       const { password, rememberMe } = body
 
       req.body = cleanFields(body)
@@ -88,6 +88,14 @@ class UserController {
       else fieldsUser.rememberMe = false
 
       if (password) lastUser.password = await hash(password, 10)
+
+      // Upload image
+      if (file) {
+        if (file.originalname) fieldsUser.imageProfile.name = file.originalname
+        if (file.size) fieldsUser.imageProfile.size = file.size
+        if (file.key) fieldsUser.imageProfile.key = file.key
+        if (file.location) fieldsUser.imageProfile.url = file.location
+      }
 
       const user = await User.findByIdAndUpdate({
         _id: userId

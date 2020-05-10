@@ -6,6 +6,10 @@
     "esModuleInterop": true,
     "allowJs": true,
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
+    "lib": [
+      "es5",
+      "es2015.promise"
+    ],
   }
 }
