@@ -19,7 +19,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     const decoded = verify(authHeaders, configAuth.secret) as Decoded
     req.userId = decoded.id
 
-    next()
+    return next()
   } catch (error) {
     try {
       const tokenDecoded = decode(authHeaders) as Decoded

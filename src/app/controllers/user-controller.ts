@@ -1,10 +1,10 @@
 import { hash } from 'bcrypt'
+import { randomBytes } from 'crypto'
 import validator from 'validator'
-import UserInterface from '../models/user/protocols'
 import { Request, Response } from 'express'
 import { User } from '../models'
 import { isValidFields, cleanFields, titleize } from '../../utils'
-import { generateToken, responseWithToken } from '../helpers'
+import { generateToken, responseWithToken, emailConfirmation } from '../helpers'
 import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../errors'
 import configs from '../../config/config'
 
@@ -41,16 +41,23 @@ class UserController {
       // Put the first letter of name in capital ans encrip password
       const hashPassword = await hash(password, 10)
       req.body = Object.assign(body, { name: titleize(name), password: hashPassword })
-
+      req.body.emailConfirmationCode = randomBytes(10).toString('hex')
+      const expires = new Date()
+      req.body.emailConfirmationExpire = expires.setHours(expires.getHours() + 1)
       // Create new user
-      const user: UserInterface = await User.create(body)
+      const user = await User.create(body)
+
+      // Invite email
+      if (!await emailConfirmation(user)) {
+        return res.status(500).json('Erro ao enviar email de confirmação')
+      }
 
       // Generate a new token
       const token = generateToken(user.id)
 
       return res.status(200).json({ user, token })
     } catch (error) {
-      console.error(error.message)
+      // console.error(error.message)
       return res.status(500).json(serverError())
     }
   }
@@ -163,6 +170,33 @@ class UserController {
       await User.findByIdAndDelete(id)
 
       return res.status(200).json(deleteSuccess())
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async emailConfirmation (req: Request, res: Response): Promise<Response> {
+    try {
+      const { userId, newToken } = req
+      const id = userId
+
+      const user: any = await User.findById(id).select('+emailConfirmationExpire emailConfirmationCode')
+
+      const now = new Date()
+      if (now > user.emailConfirmationExpire) {
+        return res.status(400).json('O código expirou')
+      }
+
+      if (req.body.emailConfirmationCode !== user.emailConfirmationCode) {
+        return res.status(400).json('Código inválido')
+      }
+
+      user.emailConfirmation = true
+
+      await user.save()
+      const resUser = await User.findById(id)
+
+      return res.status(200).json(responseWithToken(resUser, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }

@@ -9,5 +9,11 @@ export default {
     secretAccessKey: process.env.AWS_SECRET_KEY,
     region: process.env.AWS_DEFAULT_REGION
   }),
-  aws_bucket: process.env.AWS_BUCKET ?? ''
+  aws_bucket: process.env.AWS_BUCKET ?? '',
+  mail: {
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT ?? '',
+    user: process.env.MAIL_AUTH_USER,
+    pass: process.env.MAIL_AUTH_PASS
+  }
 }

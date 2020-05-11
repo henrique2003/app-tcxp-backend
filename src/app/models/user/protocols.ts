@@ -17,10 +17,14 @@ export default interface User extends Document {
   instagram?: string
   rememberMe?: boolean
   imageProfile: {
-    name: String
-    size: Number
-    key: String
-    url: String
+    name: string
+    size: number
+    key: string
+    url: string
+  }
+  emailConfirmationCode: {
+    code: String
+    expire: Date
   }
   inviteRequest: InviteRequest[]
   receivedRequest: ReceiveRequest[]

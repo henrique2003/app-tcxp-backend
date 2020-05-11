@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <title>TCXP confirmação de email</title>
+    <style>
+      .logo {
+        max-width: 800px;
+        margin: 0 auto;
+        padding-left: 20px;
+        color: rgb(255, 146, 5);
+        font-family: "Roboto", sans-serif;
+        font-size: 25px;
+      }
+
+      .content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .content .welcome {
+        font-size: 20px;
+        font-family: "Poppins", sans-serif;
+        margin: 0px;
+        margin-bottom: 2px;
+        padding: 0 10px;
+      }
+
+      .code {
+        font-size: 17px;
+        font-family: "Poppins", sans-serif;
+        margin-top: 20px;
+        padding: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo">
+      <h1>TCXP</h1>
+    </div>
+    <div class="content">
+      <p class="welcome">
+        Olá {{name}}, bem vindo a tcxp, estamos muito felizes com o seu
+        cadastro.
+      </p>
+      <p class="welcome">
+        Agora é simples, use o código abaixo para confirmar o seu email:
+      </p>
+      <p class="code">Código de confirmação: {{code}}</p>
+    </div>
+  </body>
+</html>

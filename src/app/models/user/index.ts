@@ -55,6 +55,15 @@ const UserSchema = new Schema({
   emailConfirmation: {
     type: Boolean,
     default: false
+  },
+  emailConfirmationExpire: {
+    type: Date,
+    select: false
+  },
+  emailConfirmationCode: {
+    type: String,
+    required: true,
+    select: false
   }
 }, {
   timestamps: true
