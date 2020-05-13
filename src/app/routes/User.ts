@@ -20,5 +20,7 @@ routes.post('/email/confirmation', auth, UserController.emailConfirmation)
 routes.get('/email/confirmation/resend', auth, UserController.emailConfirmationResend)
 // Forgot password
 routes.post('/forgot/password', UserController.forgotPassword)
+// Forgot password confirm
+routes.post('/forgot/password/confirm', UserController.forgotPasswordConfirm)
 
 export default routes

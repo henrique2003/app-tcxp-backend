@@ -268,10 +268,9 @@ class UserController {
         return res.status(404).json(notFound('Usuário'))
       }
 
-      // Put the first letter of name in capital ans encrip password
-      user.forgotPasswordToken = randomBytes(20).toString('hex')
       const expires = new Date()
       user.forgotPasswordExpire = expires.setHours(expires.getHours() + 1)
+      user.forgotPasswordToken = randomBytes(20).toString('hex')
 
       await user.save()
 
@@ -279,6 +278,52 @@ class UserController {
       forgotPassword(user)
 
       return res.status(200).json({ body: 'Um email foi enviado para você!' })
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async forgotPasswordConfirm (req: Request, res: Response): Promise<Response> {
+    try {
+      const { token, password, passwordConfirmation } = req.body
+
+      const user: any = await User.findOne({ forgotPasswordToken: token }).select('+forgotPasswordExpire forgotPasswordToken')
+
+      if (!user) {
+        return res.status(404).json(notFound('Token de autenticação'))
+      }
+
+      const { forgotPasswordToken, forgotPasswordExpire } = user
+
+      const now = new Date()
+      if (now > forgotPasswordExpire) {
+        return res.status(400).json('O código expirou')
+      }
+
+      if (token !== forgotPasswordToken) {
+        return res.status(400).json('Código inválido')
+      }
+
+      if (!password) {
+        return res.status(400).json(missingParamError('senha'))
+      }
+
+      if (password !== passwordConfirmation) {
+        return res.status(400).json(invalidFieldError('confirmar senha'))
+      }
+
+      user.password = await hash(password, 10)
+      user.forgotPasswordToken = null
+
+      const resUser = await User.findByIdAndUpdate({
+        _id: user.id
+      }, {
+        $set: user
+      }, {
+        upsert: true
+      })
+
+      return res.status(200).json({ body: resUser })
     } catch (error) {
       return res.status(500).json(serverError())
     }
