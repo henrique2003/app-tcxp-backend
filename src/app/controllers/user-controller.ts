@@ -207,12 +207,14 @@ class UserController {
         return res.status(404).json(notFound('Usuário'))
       }
 
+      const { emailConfirmationExpire, emailConfirmationCode } = user
+
       const now = new Date()
-      if (now > user.emailConfirmationExpire) {
+      if (now > emailConfirmationExpire) {
         return res.status(400).json('O código expirou')
       }
 
-      if (req.body.emailConfirmationCode !== user.emailConfirmationCode) {
+      if (req.body.emailConfirmationCode !== emailConfirmationCode) {
         return res.status(400).json('Código inválido')
       }
 
