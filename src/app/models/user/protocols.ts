@@ -22,12 +22,10 @@ export default interface User extends Document {
     key: string
     url: string
   }
-  emailConfirmationCode: {
-    code: String
-    expire: Date
-  }
-  inviteRequest: InviteRequest[]
-  receivedRequest: ReceiveRequest[]
+  emailConfirmationExpire?: number
+  emailConfirmationCode?: String
+  inviteRequest?: InviteRequest[]
+  receivedRequest?: ReceiveRequest[]
 }
 
 interface InviteRequest {

@@ -41,9 +41,12 @@ class UserController {
       // Put the first letter of name in capital ans encrip password
       const hashPassword = await hash(password, 10)
       req.body = Object.assign(body, { name: titleize(name), password: hashPassword })
-      req.body.emailConfirmationCode = randomBytes(10).toString('hex')
+
+      // Email confirmation
       const expires = new Date()
+      req.body.emailConfirmationCode = randomBytes(10).toString('hex')
       req.body.emailConfirmationExpire = expires.setHours(expires.getHours() + 1)
+
       // Create new user
       const user = await User.create(body)
 
@@ -64,7 +67,7 @@ class UserController {
 
   public async update (req: Request, res: Response): Promise<Response> {
     const { body, userId, newToken, file } = req
-    const { password, rememberMe } = body
+    const { password, passwordConfirmation, email, rememberMe } = body
 
     try {
       req.body = cleanFields(body)
@@ -73,6 +76,18 @@ class UserController {
 
       if (!lastUser) {
         return res.status(400).json(notFound('Usuário'))
+      }
+
+      if (email) {
+        // Valid if is a email
+        if (!validator.isEmail(email)) {
+          return res.status(400).json(invalidFieldError('email'))
+        }
+
+        // Valid id email alredy in use
+        if (await User.findOne({ email })) {
+          return res.status(400).json(fieldInUse('email'))
+        }
       }
 
       const validFields = [
@@ -86,16 +101,22 @@ class UserController {
         'instagram',
         'twitter'
       ]
-
       const fieldsUser: any = lastUser
       for (const field of validFields) {
         if (field) fieldsUser[field] = body[field]
       }
 
+      // Valid passwordConfirmation
+      if (password) {
+        if (password !== passwordConfirmation) {
+          return res.status(400).json(invalidFieldError('confirmar email'))
+        } else {
+          lastUser.password = await hash(password, 10)
+        }
+      }
+
       if (rememberMe) fieldsUser.rememberMe = true
       else fieldsUser.rememberMe = false
-
-      if (password) lastUser.password = await hash(password, 10)
 
       // Upload image
       if (file) {
@@ -157,7 +178,7 @@ class UserController {
     try {
       const id = req.userId
 
-      const user: any = await User.findById(id)
+      const user = await User.findById(id)
 
       if (user?.imageProfile) {
         const s3 = configs.s3
@@ -181,6 +202,10 @@ class UserController {
       const id = userId
 
       const user: any = await User.findById(id).select('+emailConfirmationExpire emailConfirmationCode')
+
+      if (!user) {
+        return res.status(404).json(notFound('Usuário'))
+      }
 
       const now = new Date()
       if (now > user.emailConfirmationExpire) {
@@ -207,7 +232,11 @@ class UserController {
       const { userId, newToken } = req
       const id = userId
 
-      const user: any = await User.findById(id)
+      const user = await User.findById(id)
+
+      if (!user) {
+        return res.status(404).json(notFound('Usuário'))
+      }
 
       // Put the first letter of name in capital ans encrip password
       user.emailConfirmationCode = randomBytes(10).toString('hex')
@@ -222,6 +251,32 @@ class UserController {
       await user.save()
 
       return res.status(200).json(responseWithToken('Email reenviado com sucesso', newToken))
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async changePassword (req: Request, res: Response): Promise<Response> {
+    try {
+      const { userId, newToken } = req
+      const id = userId
+
+      const user = await User.findById(id)
+
+      if (!user) {
+        return res.status(404).json(notFound('Usuário'))
+      }
+
+      // Put the first letter of name in capital ans encrip password
+      user.emailConfirmationCode = randomBytes(10).toString('hex')
+      const expires = new Date()
+      user.emailConfirmationExpire = expires.setHours(expires.getHours() + 1)
+
+      // Invite email
+      emailConfirmation(user)
+      await user.save()
+
+      return res.status(200).json(responseWithToken('Um email foi enviado para você!', newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }
