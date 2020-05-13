@@ -3,3 +3,4 @@ dist
 .env
 types.multer.d.ts
 src/resources/mail/auth/emailConfirmation.ts.html
+src/resources/mail/auth/forgotPassword.ts.html

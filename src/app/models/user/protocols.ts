@@ -24,6 +24,8 @@ export default interface User extends Document {
   }
   emailConfirmationExpire?: number
   emailConfirmationCode?: String
+  forgotPasswordExpire?: number
+  forgotPasswordToken?: String
   inviteRequest?: InviteRequest[]
   receivedRequest?: ReceiveRequest[]
 }

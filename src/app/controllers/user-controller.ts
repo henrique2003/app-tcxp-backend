@@ -4,7 +4,7 @@ import validator from 'validator'
 import { Request, Response } from 'express'
 import { User } from '../models'
 import { isValidFields, cleanFields, titleize } from '../../utils'
-import { generateToken, responseWithToken, emailConfirmation } from '../helpers'
+import { generateToken, responseWithToken, emailConfirmation, forgotPassword } from '../helpers'
 import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../errors'
 import configs from '../../config/config'
 
@@ -258,27 +258,27 @@ class UserController {
     }
   }
 
-  public async changePassword (req: Request, res: Response): Promise<Response> {
+  public async forgotPassword (req: Request, res: Response): Promise<Response> {
     try {
-      const { userId, newToken } = req
-      const id = userId
+      const { email } = req.body
 
-      const user = await User.findById(id)
+      const user = await User.findOne({ email })
 
       if (!user) {
         return res.status(404).json(notFound('Usuário'))
       }
 
       // Put the first letter of name in capital ans encrip password
-      user.emailConfirmationCode = randomBytes(10).toString('hex')
+      user.forgotPasswordToken = randomBytes(20).toString('hex')
       const expires = new Date()
-      user.emailConfirmationExpire = expires.setHours(expires.getHours() + 1)
+      user.forgotPasswordExpire = expires.setHours(expires.getHours() + 1)
 
-      // Invite email
-      emailConfirmation(user)
       await user.save()
 
-      return res.status(200).json(responseWithToken('Um email foi enviado para você!', newToken))
+      // Invite email
+      forgotPassword(user)
+
+      return res.status(200).json({ body: 'Um email foi enviado para você!' })
     } catch (error) {
       return res.status(500).json(serverError())
     }

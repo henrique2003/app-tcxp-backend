@@ -64,6 +64,15 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     select: false
+  },
+  forgotPasswordExpire: {
+    type: Date,
+    select: false
+  },
+  forgotPasswordToken: {
+    type: String,
+    required: true,
+    select: false
   }
 }, {
   timestamps: true

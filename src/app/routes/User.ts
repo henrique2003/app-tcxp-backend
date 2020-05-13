@@ -18,5 +18,7 @@ routes.delete('/users', auth, UserController.destroy)
 routes.post('/email/confirmation', auth, UserController.emailConfirmation)
 // Resend email confirmation
 routes.get('/email/confirmation/resend', auth, UserController.emailConfirmationResend)
+// Forgot password
+routes.post('/forgot/password', UserController.forgotPassword)
 
 export default routes
