@@ -16,5 +16,7 @@ routes.put('/users', auth, emailConfirmation, uploadImg.single('file'), UserCont
 routes.delete('/users', auth, UserController.destroy)
 // Email Confirmation
 routes.post('/email/confirmation', auth, UserController.emailConfirmation)
+// Resend email confirmation
+routes.get('/email/confirmation/resend', auth, UserController.emailConfirmationResend)
 
 export default routes

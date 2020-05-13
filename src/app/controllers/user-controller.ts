@@ -201,6 +201,31 @@ class UserController {
       return res.status(500).json(serverError())
     }
   }
+
+  public async emailConfirmationResend (req: Request, res: Response): Promise<Response> {
+    try {
+      const { userId, newToken } = req
+      const id = userId
+
+      const user: any = await User.findById(id)
+
+      // Put the first letter of name in capital ans encrip password
+      user.emailConfirmationCode = randomBytes(10).toString('hex')
+      const expires = new Date()
+      user.emailConfirmationExpire = expires.setHours(expires.getHours() + 1)
+
+      // Invite email
+      if (!emailConfirmation(user)) {
+        return res.status(500).json('Erro ao enviar email de confirmação')
+      }
+
+      await user.save()
+
+      return res.status(200).json(responseWithToken('Email reenviado com sucesso', newToken))
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
 }
 
 export default new UserController()
