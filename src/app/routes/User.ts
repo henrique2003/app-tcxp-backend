@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import UserController from '../controllers/user-controller'
 import { auth, emailConfirmation } from '../middlewares'
-import uploadImg from '../middlewares/multerS3'
+import uploadImg from '../middlewares/multer-s3'
 
 const routes = Router()
 
