@@ -42,7 +42,7 @@ const UserSchema = new Schema({
       ref: 'Groups'
     }
   }],
-  receivedRequest: [{
+  acceptRequest: [{
     to: {
       type: 'ObjectId',
       ref: 'User'

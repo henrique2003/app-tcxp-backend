@@ -130,7 +130,7 @@ class GroupsController {
         group: isGroup
       }
 
-      userFrom.receivedRequest.push(request)
+      userFrom.acceptRequest.push(request)
       await userFrom.save()
 
       return res.status(200).json(responseWithToken(inviteRes, newToken))
@@ -141,7 +141,7 @@ class GroupsController {
 
   public async acceptRequest (req: Request, res: Response): Promise<Response> {
     try {
-      const { body, newToken } = req
+      const { body, newToken, userId } = req
       const { to, group } = body
 
       req.body = cleanFields(body)
@@ -166,7 +166,20 @@ class GroupsController {
         return res.status(400).json(notFound('Convite'))
       }
 
-      // Validar dados de entrada
+      // Pick user to valid if accept request exist
+      const user = await User.findById(userId)
+
+      if (user?.acceptRequest) {
+        for (const accept of user.acceptRequest) {
+          if (accept.to !== to) {
+            return res.status(404).json(notFound('Convite'))
+          }
+        }
+      }
+
+      // colocar a pessoa como membro
+      // deletar o invite do convite
+      // deletar o received do convite
 
       return res.status(200).json(responseWithToken(null, newToken))
     } catch (error) {

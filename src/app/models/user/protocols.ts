@@ -27,7 +27,7 @@ export default interface User extends Document {
   forgotPasswordExpire?: number
   forgotPasswordToken?: String
   inviteRequest?: InviteRequest[]
-  receivedRequest?: ReceiveRequest[]
+  acceptRequest?: AcceptRequest[]
 }
 
 interface InviteRequest {
@@ -35,7 +35,7 @@ interface InviteRequest {
   group: PaginateResult
 }
 
-interface ReceiveRequest {
+interface AcceptRequest {
   to: User
   group: PaginateResult
 }
