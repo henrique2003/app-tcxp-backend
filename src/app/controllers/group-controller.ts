@@ -161,7 +161,7 @@ class GroupsController {
         return res.status(400).json(notFound('Convite'))
       }
 
-      const isGroup = await Groups.findById(group)
+      const isGroup: any = await Groups.findById(group)
       if (!isGroup) {
         return res.status(400).json(notFound('Convite'))
       }
@@ -177,7 +177,9 @@ class GroupsController {
         }
       }
 
-      // colocar a pessoa como membro
+      await isGroup.members.push(user)
+      isGroup.save()
+
       // deletar o invite do convite
       // deletar o received do convite
 
