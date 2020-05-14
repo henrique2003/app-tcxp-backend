@@ -156,7 +156,7 @@ class GroupsController {
         return res.status(400).json(notFound('Convite'))
       }
 
-      const isTo = await User.findById(to)
+      const isTo: any = await User.findById(to)
       if (!isTo) {
         return res.status(400).json(notFound('Convite'))
       }
@@ -177,9 +177,23 @@ class GroupsController {
         }
       }
 
+      // add member by the group
       await isGroup.members.push(user)
       isGroup.save()
 
+      // remove inviteRequest
+      isTo.inviteRequest?.splice(isTo.inviteRequest.indexOf({
+        from: userId,
+        group
+      }), 1)
+
+      await isTo.save()
+
+      // const newInviteRequests = isTo.inviteRequest?.filter((lastFrom, lastGroup) => {
+      //   return lastFrom !== userId && lastGroup !== group
+      // })
+
+      // state.filter(({ id }) => id !== action.id)
       // deletar o invite do convite
       // deletar o received do convite
 
