@@ -76,7 +76,7 @@ class GroupsController {
     }
   }
 
-  public async invite (req: Request, res: Response): Promise<Response> {
+  public async inviteRequest (req: Request, res: Response): Promise<Response> {
     try {
       const { body, newToken, userId } = req
       const { from, group } = body
@@ -134,6 +134,41 @@ class GroupsController {
       await userFrom.save()
 
       return res.status(200).json(responseWithToken(inviteRes, newToken))
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async acceptRequest (req: Request, res: Response): Promise<Response> {
+    try {
+      const { body, newToken } = req
+      const { to, group } = body
+
+      req.body = cleanFields(body)
+
+      const requiredFields = ['to', 'group']
+      if (!isValidFields(requiredFields, body)) {
+        return res.status(400).json(missingParamError())
+      }
+
+      // Valid object id from
+      if (!validObjectId(to)) {
+        return res.status(400).json(notFound('Convite'))
+      }
+
+      const isTo = await User.findById(to)
+      if (!isTo) {
+        return res.status(400).json(notFound('Convite'))
+      }
+
+      const isGroup = await Groups.findById(group)
+      if (!isGroup) {
+        return res.status(400).json(notFound('Convite'))
+      }
+
+      // Validar dados de entrada
+
+      return res.status(200).json(responseWithToken(null, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }

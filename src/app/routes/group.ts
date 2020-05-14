@@ -13,6 +13,8 @@ routes.get('/groups/mine', auth, emailConfirmation, GroupController.mine)
 // Show especify group
 routes.get('/group/:id', GroupController.show)
 // Inivite request
-routes.post('/groups/invite', auth, emailConfirmation, isInGroup, GroupController.invite)
+routes.post('/groups/invite/request', auth, emailConfirmation, isInGroup, GroupController.inviteRequest)
+// Accept request
+routes.post('/groups/accept/request', auth, emailConfirmation, GroupController.acceptRequest)
 
 export default routes
