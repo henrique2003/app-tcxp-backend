@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { GroupController } from '../controllers'
-import { auth, emailConfirmation, isInGroup } from '../middlewares'
+import { auth, emailConfirmation, isInGroup, isAdmin, isCreator } from '../middlewares'
 import uploadImg from '../middlewares/multer-s3'
 
 const routes = Router()
@@ -18,6 +18,6 @@ routes.post('/groups/invite/request', auth, emailConfirmation, isInGroup, GroupC
 // Accept request
 routes.post('/groups/accept/request', auth, emailConfirmation, GroupController.acceptRequest)
 // Update group
-routes.put('/groups/:id', auth, emailConfirmation, uploadImg.single('file'), GroupController.update)
+routes.put('/groups/:id', auth, emailConfirmation, isAdmin || isCreator, uploadImg.single('file'), GroupController.update)
 
 export default routes

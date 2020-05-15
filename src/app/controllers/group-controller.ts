@@ -263,6 +263,15 @@ class GroupsController {
       return res.status(500).json(serverError())
     }
   }
+
+  // public async logoutGroup (req: Request, res: Response): Promise<Response> {
+  //   try {
+
+  //     return res.status(200).json({ body: group })
+  //   } catch (error) {
+  //     return res.status(500).json(serverError())
+  //   }
+  // }
 }
 
 export default new GroupsController()
