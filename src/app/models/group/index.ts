@@ -11,10 +11,10 @@ const GroupsSchema = new Schema({
     type: String,
     required: true
   },
-  imageProfile: {
-    type: String,
+  image: {
+    name: String,
+    size: Number,
     key: String,
-    originalName: String,
     url: String
   },
   creator: {
@@ -38,11 +38,7 @@ const GroupsSchema = new Schema({
       type: String,
       required: true
     }
-  }],
-  completed: {
-    type: Boolean,
-    default: false
-  }
+  }]
 }, {
   timestamps: true
 })

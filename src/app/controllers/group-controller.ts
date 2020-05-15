@@ -4,6 +4,7 @@ import { isValidFields, cleanFields } from '../../utils'
 import { serverError, missingParamError, fieldInUse, notFound } from '../errors'
 import { responseWithToken } from '../helpers'
 import { validObjectId } from '../helpers/valid-object-id'
+import configs from '../../config/config'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -199,6 +200,66 @@ class GroupsController {
 
       return res.status(200).json(responseWithToken(null, newToken))
     } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async update (req: Request, res: Response): Promise<Response> {
+    const { body, newToken, file, params } = req
+    const { id } = params
+    try {
+      req.body = cleanFields(body)
+
+      const lastGroup = await Groups.findById(id)
+
+      const fieldsGroup: any = lastGroup
+      const validFields = ['title', 'description']
+      for (const field of validFields) {
+        if (field) fieldsGroup[field] = body[field]
+      }
+
+      if (file) {
+        // Delete last image if exists
+        if (fieldsGroup.image) {
+          const s3 = configs.s3
+          s3.deleteObject({
+            Bucket: configs.aws_bucket,
+            Key: fieldsGroup.image.key
+          }).promise()
+        }
+
+        const image: {
+          name?: string
+          size?: Number
+          key?: string
+          url?: string
+        } = {}
+
+        if (file.originalname) image.name = file.originalname
+        if (file.size) image.size = file.size
+        if (file.key) image.key = file.key
+        if (file.location) image.url = file.location
+
+        fieldsGroup.image = image
+      }
+
+      const group = await Groups.findByIdAndUpdate({
+        _id: id
+      }, {
+        $set: fieldsGroup
+      }, {
+        upsert: true
+      })
+
+      return res.status(200).json(responseWithToken(group, newToken))
+    } catch (error) {
+      if (file) {
+        const s3 = configs.s3
+        s3.deleteObject({
+          Bucket: configs.aws_bucket,
+          Key: file.key
+        }).promise()
+      }
       return res.status(500).json(serverError())
     }
   }

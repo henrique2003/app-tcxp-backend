@@ -19,10 +19,11 @@ interface IPagination {
 export interface Group {
   title: string
   description: string
-  imageProfile?: {
-    key?: string
-    originalName?: string
-    url?: string
+  image?: {
+    name: string
+    size: number
+    key: string
+    url: string
   }
   messages?: {
     userName?: string
