@@ -71,7 +71,6 @@ const UserSchema = new Schema({
   },
   forgotPasswordToken: {
     type: String,
-    required: true,
     select: false
   }
 }, {

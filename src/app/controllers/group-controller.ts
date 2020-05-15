@@ -151,12 +151,12 @@ class GroupsController {
         return res.status(400).json(missingParamError())
       }
 
-      // Valid object id from
+      // Valid object id
       if (!validObjectId(to)) {
         return res.status(400).json(notFound('Convite'))
       }
 
-      const isTo: any = await User.findById(to)
+      const isTo = await User.findById(to)
       if (!isTo) {
         return res.status(400).json(notFound('Convite'))
       }
@@ -169,33 +169,33 @@ class GroupsController {
       // Pick user to valid if accept request exist
       const user = await User.findById(userId)
 
-      if (user?.acceptRequest) {
-        for (const accept of user.acceptRequest) {
-          if (accept.to !== to) {
-            return res.status(404).json(notFound('Convite'))
-          }
-        }
+      if (!await User.findOne({ _id: userId, 'acceptRequest.to': to, 'acceptRequest.group': group })) {
+        return res.status(404).json(notFound('Convite'))
+      }
+
+      // Pick To to valid if invite request exist
+      if (!await User.findOne({ _id: to, 'inviteRequest.from': userId, 'inviteRequest.group': group })) {
+        return res.status(404).json(notFound('Convie'))
       }
 
       // add member by the group
-      await isGroup.members.push(user)
-      isGroup.save()
+      if (await Groups.findOne({ members: userId })) {
+        return res.status(400).json('Usuário ja esta no grupo')
+      }
+      isGroup.members.push(user)
+      await isGroup.save()
 
       // remove inviteRequest
-      isTo.inviteRequest?.splice(isTo.inviteRequest.indexOf({
-        from: userId,
-        group
-      }), 1)
-
+      isTo?.inviteRequest?.splice(
+        isTo?.inviteRequest?.map(invite => invite.from && invite.group).indexOf(user?._id, isGroup._id)
+      )
       await isTo.save()
 
-      // const newInviteRequests = isTo.inviteRequest?.filter((lastFrom, lastGroup) => {
-      //   return lastFrom !== userId && lastGroup !== group
-      // })
-
-      // state.filter(({ id }) => id !== action.id)
-      // deletar o invite do convite
-      // deletar o received do convite
+      // remove acceptRequest
+      user?.acceptRequest?.splice(
+        user?.acceptRequest?.map(accept => accept.to && accept.group).indexOf(to, isGroup._id)
+      )
+      await user?.save()
 
       return res.status(200).json(responseWithToken(null, newToken))
     } catch (error) {
