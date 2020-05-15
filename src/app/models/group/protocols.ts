@@ -16,7 +16,7 @@ interface IPagination {
   totalPages?: number
 }
 
-export interface Group {
+export interface Group extends Document {
   title: string
   description: string
   image?: {
@@ -29,7 +29,7 @@ export interface Group {
     userName?: string
     content?: string
   }
-  creator?: User
-  administrators?: User
-  members?: User
+  creator?: User[] | string
+  administrators?: User[] | string
+  members?: User[] | string
 }

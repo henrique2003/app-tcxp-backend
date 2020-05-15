@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 import { mongoosePagination } from 'ts-mongoose-pagination'
-import { PaginateResult } from './protocols'
+import { Group } from './protocols'
 
 const GroupsSchema = new Schema({
   title: {
@@ -45,4 +45,4 @@ const GroupsSchema = new Schema({
 
 GroupsSchema.plugin(mongoosePagination)
 
-export const Groups = model<PaginateResult>('Groups', GroupsSchema)
+export const Groups = model<Group>('Groups', GroupsSchema)

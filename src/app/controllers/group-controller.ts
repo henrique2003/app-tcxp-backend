@@ -264,14 +264,37 @@ class GroupsController {
     }
   }
 
-  // public async logoutGroup (req: Request, res: Response): Promise<Response> {
-  //   try {
+  public async logoutGroup (req: Request, res: Response): Promise<Response> {
+    try {
+      const { params, userId, newToken } = req
+      const { id } = params
 
-  //     return res.status(200).json({ body: group })
-  //   } catch (error) {
-  //     return res.status(500).json(serverError())
-  //   }
-  // }
+      const group = await Groups.findById(id)
+
+      if (!group) {
+        return res.status(404).json(notFound('Grupo'))
+      }
+
+      if (typeof group.members === 'object') {
+        group?.members?.splice(
+          group?.members?.map(member => member._id).indexOf(userId)
+          )
+      }
+
+      if (typeof group.administrators === 'object') {
+          group?.administrators?.splice(
+            group?.administrators?.map(member => member._id).indexOf(userId)
+            )
+      }
+
+      await group?.save()
+
+      return res.status(200).json(responseWithToken(null, newToken))
+    } catch (error) {
+      console.log(error.message)
+      return res.status(500).json(serverError())
+    }
+  }
 }
 
 export default new GroupsController()

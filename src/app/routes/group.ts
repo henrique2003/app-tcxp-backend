@@ -19,5 +19,7 @@ routes.post('/groups/invite/request', auth, emailConfirmation, isInGroup, GroupC
 routes.post('/groups/accept/request', auth, emailConfirmation, GroupController.acceptRequest)
 // Update group
 routes.put('/groups/:id', auth, emailConfirmation, isAdmin || isCreator, uploadImg.single('file'), GroupController.update)
+// Logout of group
+routes.delete('/groups/logout/:id', auth, emailConfirmation, GroupController.logoutGroup)
 
 export default routes
