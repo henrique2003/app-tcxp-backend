@@ -6,7 +6,6 @@ import { User } from '../models'
 import { isValidFields, cleanFields, titleize } from '../../utils'
 import { generateToken, responseWithToken, emailConfirmation, forgotPassword, awsS3DeleteImage } from '../helpers'
 import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../errors'
-import configs from '../../config/config'
 
 class UserController {
   public async store (req: Request, res: Response): Promise<Response> {
@@ -174,11 +173,7 @@ class UserController {
       const user = await User.findById(id)
 
       if (user?.imageProfile) {
-        const s3 = configs.s3
-        s3.deleteObject({
-          Bucket: configs.aws_bucket,
-          Key: user.imageProfile.key
-        }).promise()
+        awsS3DeleteImage(user.imageProfile.key)
       }
 
       await User.findByIdAndDelete(id)
