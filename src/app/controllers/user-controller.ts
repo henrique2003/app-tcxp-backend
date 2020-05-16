@@ -58,9 +58,8 @@ class UserController {
       // Generate a new token
       const token = generateToken(user.id)
 
-      return res.status(200).json({ user, token })
+      return res.status(200).json(responseWithToken(user, token))
     } catch (error) {
-      // console.error(error.message)
       return res.status(500).json(serverError())
     }
   }
@@ -165,10 +164,7 @@ class UserController {
 
       if (!user) return res.status(400).json(notFound('Usuário'))
 
-      user.inviteRequest = []
-      user.acceptRequest = []
-
-      return res.status(200).json({ body: user })
+      return res.status(200).json(responseWithToken(user))
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -190,7 +186,7 @@ class UserController {
 
       await User.findByIdAndDelete(id)
 
-      return res.status(200).json(deleteSuccess())
+      return res.status(200).json(responseWithToken(deleteSuccess()))
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -277,7 +273,7 @@ class UserController {
       // Invite email
       forgotPassword(user)
 
-      return res.status(200).json({ body: 'Um email foi enviado para você!' })
+      return res.status(200).json(responseWithToken('Um email foi enviado para você!'))
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -323,7 +319,7 @@ class UserController {
         upsert: true
       })
 
-      return res.status(200).json({ body: resUser })
+      return res.status(200).json(responseWithToken(resUser))
     } catch (error) {
       return res.status(500).json(serverError())
     }
