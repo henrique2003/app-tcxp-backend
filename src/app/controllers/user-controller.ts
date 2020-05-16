@@ -13,7 +13,8 @@ import {
   notFound,
   deleteSuccess,
   expiresCode,
-  invalidCode
+  invalidCode,
+  inviteEmailError
 } from '../errors'
 
 class UserController {
@@ -60,7 +61,7 @@ class UserController {
 
       // Invite email
       if (!await emailConfirmation(user)) {
-        return res.status(500).json(responseWithToken('Erro ao enviar email de confirmação'))
+        return res.status(500).json(responseWithToken(inviteEmailError('confirmação')))
       }
 
       // Generate a new token
@@ -244,7 +245,7 @@ class UserController {
 
       // Invite email
       if (!emailConfirmation(user)) {
-        return res.status(500).json(responseWithToken('Erro ao enviar email de confirmação', newToken))
+        return res.status(500).json(responseWithToken(inviteEmailError('confirmação'), newToken))
       }
 
       await user.save()
