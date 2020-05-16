@@ -67,6 +67,7 @@ class UserController {
   public async update (req: Request, res: Response): Promise<Response> {
     const { body, userId, newToken, file } = req
     const { password, passwordConfirmation, email, rememberMe } = body
+    const { key, originalname, size, location: url } = file
 
     try {
       req.body = cleanFields(body)
@@ -123,10 +124,11 @@ class UserController {
         if (fieldsUser.imageProfile) {
           awsS3DeleteImage(fieldsUser.imageProfile.key)
         }
-        if (file.originalname) fieldsUser.imageProfile.name = file.originalname
-        if (file.size) fieldsUser.imageProfile.size = file.size
-        if (file.key) fieldsUser.imageProfile.key = file.key
-        if (file.location) fieldsUser.imageProfile.url = file.location
+
+        if (originalname) fieldsUser.imageProfile.name = originalname
+        if (size) fieldsUser.imageProfile.size = size
+        if (key) fieldsUser.imageProfile.key = key
+        if (location) fieldsUser.imageProfile.url = url
       }
 
       const user = await User.findByIdAndUpdate({
@@ -140,7 +142,7 @@ class UserController {
       return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
       if (file) {
-        awsS3DeleteImage(file.key)
+        awsS3DeleteImage(key)
       }
       return res.status(500).json(serverError())
     }
