@@ -5,7 +5,15 @@ import { Request, Response } from 'express'
 import { User } from '../models'
 import { isValidFields, cleanFields, titleize } from '../../utils'
 import { generateToken, responseWithToken, emailConfirmation, forgotPassword, awsS3DeleteImage } from '../helpers'
-import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../errors'
+import {
+  missingParamError,
+  invalidFieldError,
+  fieldInUse,
+  serverError,
+  notFound,
+  deleteSuccess,
+  expiresCode
+} from '../errors'
 
 class UserController {
   public async store (req: Request, res: Response): Promise<Response> {
@@ -199,7 +207,7 @@ class UserController {
 
       const now = new Date()
       if (now > emailConfirmationExpire) {
-        return res.status(400).json(responseWithToken('O código expirou', newToken))
+        return res.status(400).json(responseWithToken(expiresCode(), newToken))
       }
 
       if (req.body.emailConfirmationCode !== emailConfirmationCode) {
@@ -285,7 +293,7 @@ class UserController {
 
       const now = new Date()
       if (now > forgotPasswordExpire) {
-        return res.status(400).json(responseWithToken('O código expirou'))
+        return res.status(400).json(responseWithToken(expiresCode()))
       }
 
       if (token !== forgotPasswordToken) {
