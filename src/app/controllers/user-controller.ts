@@ -19,22 +19,22 @@ class UserController {
       // Verify if fields exists
       const requiredFields = ['name', 'password', 'passwordConfirmation', 'email']
       if (!isValidFields(requiredFields, body)) {
-        return res.status(400).json(missingParamError())
+        return res.status(400).json(responseWithToken(missingParamError()))
       }
 
       // Valid passwordConfirmation
       if (password !== passwordConfirmation) {
-        return res.status(400).json(invalidFieldError('confirmar email'))
+        return res.status(400).json(responseWithToken(invalidFieldError('confirmar email')))
       }
 
       // Valid if is a email
       if (!validator.isEmail(email)) {
-        return res.status(400).json(invalidFieldError('email'))
+        return res.status(400).json(responseWithToken(invalidFieldError('email')))
       }
 
       // Valid id email alredy in use
       if (await User.findOne({ email })) {
-        return res.status(400).json(fieldInUse('email'))
+        return res.status(400).json(responseWithToken(fieldInUse('email')))
       }
 
       // Put the first letter of name in capital ans encrip password
@@ -51,7 +51,7 @@ class UserController {
 
       // Invite email
       if (!await emailConfirmation(user)) {
-        return res.status(500).json('Erro ao enviar email de confirmação')
+        return res.status(500).json(responseWithToken('Erro ao enviar email de confirmação'))
       }
 
       // Generate a new token
@@ -74,18 +74,18 @@ class UserController {
       const lastUser = await User.findById(userId)
 
       if (!lastUser) {
-        return res.status(400).json(notFound('Usuário'))
+        return res.status(400).json(responseWithToken(notFound('Usuário'), newToken))
       }
 
       if (email) {
         // Valid if is a email
         if (!validator.isEmail(email)) {
-          return res.status(400).json(invalidFieldError('email'))
+          return res.status(400).json(responseWithToken(invalidFieldError('email'), newToken))
         }
 
         // Valid id email alredy in use
         if (await User.findOne({ email })) {
-          return res.status(400).json(fieldInUse('email'))
+          return res.status(400).json(responseWithToken(fieldInUse('email'), newToken))
         }
       }
 
@@ -111,7 +111,7 @@ class UserController {
       // Valid passwordConfirmation
       if (password) {
         if (password !== passwordConfirmation) {
-          return res.status(400).json(invalidFieldError('confirmar email'))
+          return res.status(400).json(responseWithToken(invalidFieldError('confirmar email'), newToken))
         } else {
           lastUser.password = await hash(password, 10)
         }
@@ -154,11 +154,11 @@ class UserController {
     try {
       const { id } = req.params
 
-      if (!id) return res.status(400).json('Id requerido')
+      if (!id) return res.status(400).json(responseWithToken(notFound('id')))
 
       const user = await User.findById(id)
 
-      if (!user) return res.status(400).json(notFound('Usuário'))
+      if (!user) return res.status(400).json(responseWithToken(notFound('Usuário')))
 
       return res.status(200).json(responseWithToken(user))
     } catch (error) {
@@ -192,18 +192,18 @@ class UserController {
       const user: any = await User.findById(id).select('+emailConfirmationExpire emailConfirmationCode')
 
       if (!user) {
-        return res.status(404).json(notFound('Usuário'))
+        return res.status(404).json(responseWithToken(notFound('Usuário'), newToken))
       }
 
       const { emailConfirmationExpire, emailConfirmationCode } = user
 
       const now = new Date()
       if (now > emailConfirmationExpire) {
-        return res.status(400).json('O código expirou')
+        return res.status(400).json(responseWithToken('O código expirou', newToken))
       }
 
       if (req.body.emailConfirmationCode !== emailConfirmationCode) {
-        return res.status(400).json('Código inválido')
+        return res.status(400).json(responseWithToken('Código inválido', newToken))
       }
 
       user.emailConfirmation = true
@@ -225,7 +225,7 @@ class UserController {
       const user = await User.findById(id)
 
       if (!user) {
-        return res.status(404).json(notFound('Usuário'))
+        return res.status(404).json(responseWithToken(notFound('Usuário'), newToken))
       }
 
       // Put the first letter of name in capital ans encrip password
@@ -235,7 +235,7 @@ class UserController {
 
       // Invite email
       if (!emailConfirmation(user)) {
-        return res.status(500).json('Erro ao enviar email de confirmação')
+        return res.status(500).json(responseWithToken('Erro ao enviar email de confirmação', newToken))
       }
 
       await user.save()
@@ -253,7 +253,7 @@ class UserController {
       const user = await User.findOne({ email })
 
       if (!user) {
-        return res.status(404).json(notFound('Usuário'))
+        return res.status(404).json(responseWithToken(notFound('Usuário')))
       }
 
       const expires = new Date()
@@ -278,26 +278,26 @@ class UserController {
       const user: any = await User.findOne({ forgotPasswordToken: token }).select('+forgotPasswordExpire forgotPasswordToken')
 
       if (!user) {
-        return res.status(404).json(notFound('Token de autenticação'))
+        return res.status(404).json(responseWithToken(notFound('Token de autenticação')))
       }
 
       const { forgotPasswordToken, forgotPasswordExpire } = user
 
       const now = new Date()
       if (now > forgotPasswordExpire) {
-        return res.status(400).json('O código expirou')
+        return res.status(400).json(responseWithToken('O código expirou'))
       }
 
       if (token !== forgotPasswordToken) {
-        return res.status(400).json('Código inválido')
+        return res.status(400).json(responseWithToken('Código inválido'))
       }
 
       if (!password) {
-        return res.status(400).json(missingParamError('senha'))
+        return res.status(400).json(responseWithToken(missingParamError('senha')))
       }
 
       if (password !== passwordConfirmation) {
-        return res.status(400).json(invalidFieldError('confirmar senha'))
+        return res.status(400).json(responseWithToken(invalidFieldError('confirmar senha')))
       }
 
       user.password = await hash(password, 10)
