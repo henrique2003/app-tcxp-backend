@@ -67,7 +67,7 @@ class UserController {
   public async update (req: Request, res: Response): Promise<Response> {
     const { body, userId, newToken, file } = req
     const { password, passwordConfirmation, email, rememberMe } = body
-    const { key, originalname, size, location: url } = file
+    const { key, originalname, size, location } = file
 
     try {
       req.body = cleanFields(body)
@@ -101,7 +101,10 @@ class UserController {
         'instagram',
         'twitter'
       ]
+
       const fieldsUser: any = lastUser
+      const { imageProfile } = fieldsUser
+
       for (const field of validFields) {
         if (field) fieldsUser[field] = body[field]
       }
@@ -121,14 +124,14 @@ class UserController {
       // Upload image
       if (file) {
         // Delete last image if exists
-        if (fieldsUser.imageProfile) {
-          awsS3DeleteImage(fieldsUser.imageProfile.key)
+        if (imageProfile) {
+          awsS3DeleteImage(imageProfile.key)
         }
 
-        if (originalname) fieldsUser.imageProfile.name = originalname
-        if (size) fieldsUser.imageProfile.size = size
-        if (key) fieldsUser.imageProfile.key = key
-        if (location) fieldsUser.imageProfile.url = url
+        if (originalname) imageProfile.name = originalname
+        if (size) imageProfile.size = size
+        if (key) imageProfile.key = key
+        if (location) imageProfile.url = location
       }
 
       const user = await User.findByIdAndUpdate({
