@@ -12,7 +12,8 @@ import {
   serverError,
   notFound,
   deleteSuccess,
-  expiresCode
+  expiresCode,
+  invalidCode
 } from '../errors'
 
 class UserController {
@@ -211,7 +212,7 @@ class UserController {
       }
 
       if (req.body.emailConfirmationCode !== emailConfirmationCode) {
-        return res.status(400).json(responseWithToken('Código inválido', newToken))
+        return res.status(400).json(responseWithToken(invalidCode(), newToken))
       }
 
       user.emailConfirmation = true
@@ -297,7 +298,7 @@ class UserController {
       }
 
       if (token !== forgotPasswordToken) {
-        return res.status(400).json(responseWithToken('Código inválido'))
+        return res.status(400).json(responseWithToken(invalidCode()))
       }
 
       if (!password) {
