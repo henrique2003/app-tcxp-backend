@@ -21,5 +21,7 @@ routes.post('/groups/accept/request', auth, emailConfirmation, GroupController.a
 routes.put('/groups/:id', auth, emailConfirmation, isCreatorOrAdmin, uploadImg.single('file'), GroupController.update)
 // Logout of group
 routes.delete('/groups/logout/:id', auth, emailConfirmation, GroupController.logoutGroup)
+// Logout of group
+routes.delete('/groups/participant/remove/:id/:idParticipant', auth, emailConfirmation, isCreatorOrAdmin, GroupController.removeParticipantGroup)
 
 export default routes

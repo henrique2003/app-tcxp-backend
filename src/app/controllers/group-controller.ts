@@ -291,6 +291,38 @@ class GroupsController {
       return res.status(500).json(serverError())
     }
   }
+
+  public async removeParticipantGroup (req: Request, res: Response): Promise<Response> {
+    try {
+      const { params, newToken } = req
+      const { id, idParticipant } = params
+
+      const group = await Groups.findById(id)
+
+      if (!group) {
+        return res.status(404).json(responseWithToken(notFound('Grupo'), newToken))
+      }
+
+      if (typeof group.members === 'object') {
+        group?.members?.splice(
+          group?.members?.map(member => member._id).indexOf(idParticipant)
+          )
+      }
+
+      if (typeof group.administrators === 'object') {
+          group?.administrators?.splice(
+            group?.administrators?.map(member => member._id).indexOf(idParticipant)
+            )
+      }
+
+      await group?.save()
+
+      return res.status(200).json(responseWithToken('Removido do grupo com sucesso', newToken))
+    } catch (error) {
+      console.log(error.message)
+      return res.status(500).json(serverError())
+    }
+  }
 }
 
 export default new GroupsController()
