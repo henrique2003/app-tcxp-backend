@@ -19,7 +19,7 @@ class GroupsController {
 
       const groups = await Groups.paginate({}, options)
 
-      return res.status(200).json({ body: groups })
+      return res.status(200).json(responseWithToken(groups))
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -71,7 +71,7 @@ class GroupsController {
 
       if (!group) return res.status(400).json(notFound('Grupo'))
 
-      return res.status(200).json({ body: group })
+      return res.status(200).json(responseWithToken(group))
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -289,7 +289,7 @@ class GroupsController {
 
       await group?.save()
 
-      return res.status(200).json(responseWithToken(null, newToken))
+      return res.status(200).json(responseWithToken('Saiu do grupo com sucesso', newToken))
     } catch (error) {
       console.log(error.message)
       return res.status(500).json(serverError())

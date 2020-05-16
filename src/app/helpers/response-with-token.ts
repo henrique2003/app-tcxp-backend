@@ -3,6 +3,6 @@ interface ResponseWithToken {
   token?: string
 }
 
-export const responseWithToken = (body: any, token: string): ResponseWithToken => {
+export const responseWithToken = (body: any, token: string = ''): ResponseWithToken => {
   return token ? { body, token } : { body }
 }
