@@ -205,6 +205,7 @@ class GroupsController {
 
   public async update (req: Request, res: Response): Promise<Response> {
     const { body, newToken, file, params } = req
+    const { title, description } = body
     const { id } = params
     try {
       req.body = cleanFields(body)
@@ -212,10 +213,14 @@ class GroupsController {
       const lastGroup = await Groups.findById(id)
 
       const fieldsGroup: any = lastGroup
-      const validFields = ['title', 'description']
-      for (const field of validFields) {
-        if (field) fieldsGroup[field] = body[field]
+
+      if (title && !await Groups.findOne({ title })) {
+        fieldsGroup.title = title
+      } else {
+        return res.status(400).json(responseWithToken(fieldInUse('Titulo'), newToken))
       }
+
+      if (description) fieldsGroup.description = description
 
       if (file) {
         // Delete last image if exists
