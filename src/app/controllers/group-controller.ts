@@ -47,11 +47,11 @@ class GroupsController {
 
       const requiredFields = ['title', 'description']
       if (!isValidFields(requiredFields, body)) {
-        return res.status(400).json(missingParamError())
+        return res.status(400).json(responseWithToken(missingParamError(), newToken))
       }
 
       if (await Groups.findOne({ title: body.title })) {
-        return res.status(400).json(fieldInUse('Nome do grupo'))
+        return res.status(400).json(responseWithToken(fieldInUse('Nome do grupo'), newToken))
       }
 
       body.creator = await User.findById(userId)
@@ -68,7 +68,7 @@ class GroupsController {
     try {
       const group = await Groups.findById(req.params.id).populate('creator administrators members')
 
-      if (!group) return res.status(400).json(notFound('Grupo'))
+      if (!group) return res.status(400).json(responseWithToken(notFound('Grupo')))
 
       return res.status(200).json(responseWithToken(group))
     } catch (error) {
@@ -85,22 +85,22 @@ class GroupsController {
 
       const requiredFields = ['from', 'group']
       if (!isValidFields(requiredFields, body)) {
-        return res.status(400).json(missingParamError())
+        return res.status(400).json(responseWithToken(missingParamError(), newToken))
       }
 
       // Valid object id from
       if (!validObjectId(from)) {
-        return res.status(400).json(notFound('Convite'))
+        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
       }
 
       const isFrom = await User.findById(from)
       if (!isFrom) {
-        return res.status(400).json(notFound('Convite'))
+        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
       }
 
       const isGroup = await Groups.findById(group)
       if (!isGroup) {
-        return res.status(400).json(notFound('Convite'))
+        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
       }
 
       // Pick user to
@@ -109,7 +109,7 @@ class GroupsController {
       // if repeat invite
       for (const invite of userTo.inviteRequest) {
         if (invite.from == from && invite.group == group) {
-          return res.status(400).json('Convite já existe')
+          return res.status(400).json(responseWithToken('Convite já existe', newToken))
         }
       }
 
@@ -148,39 +148,39 @@ class GroupsController {
 
       const requiredFields = ['to', 'group']
       if (!isValidFields(requiredFields, body)) {
-        return res.status(400).json(missingParamError())
+        return res.status(400).json(responseWithToken(missingParamError(), newToken))
       }
 
       // Valid object id
       if (!validObjectId(to)) {
-        return res.status(400).json(notFound('Convite'))
+        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
       }
 
       const isTo = await User.findById(to)
       if (!isTo) {
-        return res.status(400).json(notFound('Convite'))
+        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
       }
 
       const isGroup: any = await Groups.findById(group)
       if (!isGroup) {
-        return res.status(400).json(notFound('Convite'))
+        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
       }
 
       // Pick user to valid if accept request exist
       const user = await User.findById(userId)
 
       if (!await User.findOne({ _id: userId, 'acceptRequest.to': to, 'acceptRequest.group': group })) {
-        return res.status(404).json(notFound('Convite'))
+        return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
       }
 
       // Pick To to valid if invite request exist
       if (!await User.findOne({ _id: to, 'inviteRequest.from': userId, 'inviteRequest.group': group })) {
-        return res.status(404).json(notFound('Convie'))
+        return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
       }
 
       // add member by the group
       if (await Groups.findOne({ members: userId })) {
-        return res.status(400).json('Usuário ja esta no grupo')
+        return res.status(400).json(responseWithToken('Usuário ja esta no grupo', newToken))
       }
       isGroup.members.push(user)
       await isGroup.save()
@@ -268,7 +268,7 @@ class GroupsController {
       const group = await Groups.findById(id)
 
       if (!group) {
-        return res.status(404).json(notFound('Grupo'))
+        return res.status(404).json(responseWithToken(notFound('Grupo'), newToken))
       }
 
       if (typeof group.members === 'object') {
