@@ -2,9 +2,8 @@ import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
 import { serverError, missingParamError, fieldInUse, notFound } from '../errors'
-import { responseWithToken } from '../helpers'
+import { responseWithToken, awsS3DeleteImage } from '../helpers'
 import { validObjectId } from '../helpers/valid-object-id'
-import configs from '../../config/config'
 
 class GroupsController {
   public async index (req: Request, res: Response): Promise<Response> {
@@ -221,11 +220,7 @@ class GroupsController {
       if (file) {
         // Delete last image if exists
         if (fieldsGroup.image) {
-          const s3 = configs.s3
-          s3.deleteObject({
-            Bucket: configs.aws_bucket,
-            Key: fieldsGroup.image.key
-          }).promise()
+          awsS3DeleteImage(fieldsGroup.image.key)
         }
 
         const image: {
@@ -254,11 +249,7 @@ class GroupsController {
       return res.status(200).json(responseWithToken(group, newToken))
     } catch (error) {
       if (file) {
-        const s3 = configs.s3
-        s3.deleteObject({
-          Bucket: configs.aws_bucket,
-          Key: file.key
-        }).promise()
+        awsS3DeleteImage(file.key)
       }
       return res.status(500).json(serverError())
     }

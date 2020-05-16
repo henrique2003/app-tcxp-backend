@@ -4,7 +4,7 @@ import validator from 'validator'
 import { Request, Response } from 'express'
 import { User } from '../models'
 import { isValidFields, cleanFields, titleize } from '../../utils'
-import { generateToken, responseWithToken, emailConfirmation, forgotPassword } from '../helpers'
+import { generateToken, responseWithToken, emailConfirmation, forgotPassword, awsS3DeleteImage } from '../helpers'
 import { missingParamError, invalidFieldError, fieldInUse, serverError, notFound, deleteSuccess } from '../errors'
 import configs from '../../config/config'
 
@@ -121,11 +121,7 @@ class UserController {
       if (file) {
         // Delete last image if exists
         if (fieldsUser.imageProfile) {
-          const s3 = configs.s3
-          s3.deleteObject({
-            Bucket: configs.aws_bucket,
-            Key: fieldsUser.imageProfile.key
-          }).promise()
+          awsS3DeleteImage(fieldsUser.imageProfile.key)
         }
         if (file.originalname) fieldsUser.imageProfile.name = file.originalname
         if (file.size) fieldsUser.imageProfile.size = file.size
@@ -144,11 +140,7 @@ class UserController {
       return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
       if (file) {
-        const s3 = configs.s3
-        s3.deleteObject({
-          Bucket: configs.aws_bucket,
-          Key: file.key
-        }).promise()
+        awsS3DeleteImage(file.key)
       }
       return res.status(500).json(serverError())
     }
