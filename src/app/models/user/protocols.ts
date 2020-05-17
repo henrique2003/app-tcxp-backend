@@ -31,11 +31,13 @@ export default interface User extends Document {
 }
 
 interface InviteRequest {
+  division: string
   from: User
   group: PaginateResult
 }
 
 interface AcceptRequest {
+  division: string
   to: User
   group: PaginateResult
 }

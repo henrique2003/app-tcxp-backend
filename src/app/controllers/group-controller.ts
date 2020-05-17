@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
-import { serverError, missingParamError, fieldInUse, notFound, deleteSuccess } from '../errors'
+import { serverError, missingParamError, fieldInUse, notFound, deleteSuccess, invalidFieldError } from '../errors'
 import { responseWithToken, awsS3DeleteImage } from '../helpers'
 import { validObjectId } from '../helpers/valid-object-id'
 
@@ -79,18 +79,33 @@ class GroupsController {
   public async inviteRequest (req: Request, res: Response): Promise<Response> {
     try {
       const { body, newToken, userId } = req
-      const { from, group } = body
+      const { from, group, type } = body
 
       req.body = cleanFields(body)
 
-      const requiredFields = ['from', 'group']
+      const requiredFields = ['from', 'group', 'type']
       if (!isValidFields(requiredFields, body)) {
         return res.status(400).json(responseWithToken(missingParamError(), newToken))
       }
 
-      // Valid object id from
-      if (!validObjectId(from)) {
-        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
+      // Valid type
+      if (type !== 'invite' && type !== 'ask') {
+        return res.status(400).json(responseWithToken(invalidFieldError('Type'), newToken))
+      }
+
+      // Valid if user is in the group
+      if (type === 'invite') {
+        if (!validObjectId(group)) {
+          return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
+        }
+
+        if (!await Groups.findOne({ _id: group, creator: userId })) {
+          if (!await Groups.findOne({ _id: group, administrator: userId })) {
+            if (!await Groups.findOne({ _id: group, members: userId })) {
+              return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
+            }
+          }
+        }
       }
 
       const isFrom = await User.findById(from)
@@ -114,6 +129,7 @@ class GroupsController {
       }
 
       const invite = {
+        division: type,
         from: isFrom,
         group: isGroup
       }
@@ -126,6 +142,7 @@ class GroupsController {
       const userFrom: any = await User.findById(from)
 
       const request = {
+        division: type,
         to: userTo,
         group: isGroup
       }

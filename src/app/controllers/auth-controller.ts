@@ -35,7 +35,7 @@ class AuthController {
   public async loadUser (req: Request, res: Response): Promise<Response> {
     try {
       const { userId, newToken } = req
-      const user = await User.findById(userId).populate('inviteRequest.from inviteRequest.group')
+      const user = await User.findById(userId)
 
       return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
