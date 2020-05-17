@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express'
 import { verify, decode } from 'jsonwebtoken'
 import configAuth from '../../config/config'
 import { User } from '../models/user'
-import { generateToken } from '../helpers'
+import { generateToken, responseWithToken } from '../helpers'
+import { notFound, serverError } from '../errors'
 
 interface Decoded {
   id: string
@@ -12,7 +13,7 @@ interface Decoded {
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   const authHeaders = req.header('Authorization')
-  if (!authHeaders) return res.status(401).json('Token não encontrado')
+  if (!authHeaders) return res.status(401).json(responseWithToken(notFound('Token')))
 
   try {
     // Validate token
@@ -35,9 +36,9 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
         return next()
       }
 
-      return res.status(401).json('Token inválido')
+      return res.status(401).json(responseWithToken('Token inválido'))
     } catch (error) {
-      return res.status(500).json('Server Error')
+      return res.status(500).json(serverError())
     }
   }
 }

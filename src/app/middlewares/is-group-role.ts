@@ -1,13 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
 import { Groups } from '../models'
 import { serverError, notFound } from '../errors'
+import { responseWithToken } from '../helpers'
 
 export const isMember = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { params, userId } = req
+    const { params, userId, newToken } = req
 
     if (!params.id) {
-      return res.status(400).json(notFound('Id'))
+      return res.status(400).json(responseWithToken(notFound('Id'), newToken))
     }
 
     if (!await Groups.findOne({ _id: params.id, members: userId })) {
@@ -22,14 +23,14 @@ export const isMember = async (req: Request, res: Response, next: NextFunction) 
 
 export const isAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { params, userId } = req
+    const { params, userId, newToken } = req
 
     if (!params.id) {
-      return res.status(400).json(notFound('Id'))
+      return res.status(400).json(responseWithToken(notFound('Id'), newToken))
     }
 
     if (!await Groups.findOne({ _id: params.id, administrators: userId })) {
-      return res.status(401).json('Acesso negadoc')
+      return res.status(401).json('Acesso negado')
     }
 
     return next()
@@ -40,10 +41,10 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction) =
 
 export const isCreator = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { params, userId } = req
+    const { params, userId, newToken } = req
 
     if (!params.id) {
-      return res.status(400).json(notFound('Id'))
+      return res.status(400).json(responseWithToken(notFound('Id'), newToken))
     }
 
     if (!await Groups.findOne({ _id: params.id, creator: userId })) {
@@ -58,16 +59,16 @@ export const isCreator = async (req: Request, res: Response, next: NextFunction)
 
 export const isCreatorOrAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { params, userId } = req
+    const { params, userId, newToken } = req
     const { id } = params
 
     if (!params.id) {
-      return res.status(400).json(notFound('Id'))
+      return res.status(400).json(responseWithToken(notFound('Id'), newToken))
     }
 
     if (!await Groups.findOne({ _id: id, creator: userId })) {
       if (!await Groups.findOne({ _id: id, administrators: userId })) {
-        return res.status(401).json('Acesso negadoc')
+        return res.status(401).json('Acesso negado')
       }
     }
 
