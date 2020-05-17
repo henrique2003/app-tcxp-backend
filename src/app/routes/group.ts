@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { GroupController } from '../controllers'
-import { auth, emailConfirmation, isInGroup, isCreatorOrAdmin } from '../middlewares'
+import { auth, emailConfirmation, isInGroup, isCreatorOrAdmin, isCreator } from '../middlewares'
 import uploadImg from '../middlewares/multer-s3'
 
 const routes = Router()
@@ -23,5 +23,7 @@ routes.put('/groups/:id', auth, emailConfirmation, isCreatorOrAdmin, uploadImg.s
 routes.delete('/groups/logout/:id', auth, emailConfirmation, GroupController.logoutGroup)
 // Logout of group
 routes.delete('/groups/participant/remove/:id/:idParticipant', auth, emailConfirmation, isCreatorOrAdmin, GroupController.removeParticipantGroup)
+// Destroy group
+routes.delete('/groups/:id', auth, emailConfirmation, isCreator, GroupController.destroy)
 
 export default routes

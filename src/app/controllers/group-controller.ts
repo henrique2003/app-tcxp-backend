@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Groups, User } from '../models'
 import { isValidFields, cleanFields } from '../../utils'
-import { serverError, missingParamError, fieldInUse, notFound } from '../errors'
+import { serverError, missingParamError, fieldInUse, notFound, deleteSuccess } from '../errors'
 import { responseWithToken, awsS3DeleteImage } from '../helpers'
 import { validObjectId } from '../helpers/valid-object-id'
 
@@ -318,6 +318,59 @@ class GroupsController {
       await group?.save()
 
       return res.status(200).json(responseWithToken('Removido do grupo com sucesso', newToken))
+    } catch (error) {
+      console.log(error.message)
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async destroy (req: Request, res: Response): Promise<Response> {
+    try {
+      const { params, newToken } = req
+      const { id } = params
+
+      if (!id) {
+        res.status(400).json(responseWithToken(notFound('Id'), newToken))
+      }
+
+      const usersAccepts = await User.find({ 'acceptRequest.group': id })
+
+      const idGroup: any = id
+      if (usersAccepts) {
+        usersAccepts.map(async user => {
+          user?.acceptRequest?.splice(
+            user?.acceptRequest?.map(accept => accept.group).indexOf(idGroup)
+            )
+          await User.findByIdAndUpdate({
+            _id: user.id
+          }, {
+            $set: user
+          }, {
+            upsert: true
+          })
+        })
+      }
+
+      const usersRequests = await User.find({ 'inviteRequest.group': id })
+
+      if (usersRequests) {
+        usersRequests.map(async user => {
+          user?.inviteRequest?.splice(
+            user?.inviteRequest?.map(request => request.group).indexOf(idGroup)
+            )
+          await User.findByIdAndUpdate({
+            _id: user.id
+          }, {
+            $set: user
+          }, {
+            upsert: true
+          })
+        })
+      }
+
+      await Groups.findByIdAndDelete(id)
+
+      return res.status(200).json(responseWithToken(deleteSuccess(), newToken))
     } catch (error) {
       console.log(error.message)
       return res.status(500).json(serverError())
