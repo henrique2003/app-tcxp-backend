@@ -1,5 +1,5 @@
 import { Document } from 'mongoose'
-import { PaginateResult } from '../group/protocols'
+import { Group } from '../group/protocols'
 
 export default interface User extends Document {
   name: string
@@ -31,13 +31,11 @@ export default interface User extends Document {
 }
 
 interface InviteRequest {
-  division: string
   from: User
-  group: PaginateResult
+  group: Group
 }
 
 interface AcceptRequest {
-  division: string
   to: User
-  group: PaginateResult
+  group: Group
 }

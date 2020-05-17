@@ -6,6 +6,8 @@ import uploadImg from '../middlewares/multer-s3'
 const routes = Router()
 
 // List all Users
+// Index
+routes.get('/users', UserController.index)
 // Store
 routes.post('/users', UserController.store)
 // Show

@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose'
+import { mongoosePagination } from 'ts-mongoose-pagination'
 import UserInterface from './protocols'
 
 const UserSchema = new Schema({
@@ -76,5 +77,7 @@ const UserSchema = new Schema({
 }, {
   timestamps: true
 })
+
+UserSchema.plugin(mongoosePagination)
 
 export const User = model<UserInterface>('User', UserSchema)

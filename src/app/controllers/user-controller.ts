@@ -18,6 +18,24 @@ import {
 } from '../errors'
 
 class UserController {
+  public async index (req: Request, res: Response): Promise<Response> {
+    try {
+      const { page = 1 } = req.query
+
+      const options = {
+        perPage: page,
+        limit: 10
+      }
+
+      const user = await User.paginate({}, options)
+
+      return res.status(200).json(responseWithToken(user))
+    } catch (error) {
+      console.log(error.message)
+      return res.status(500).json(serverError())
+    }
+  }
+
   public async store (req: Request, res: Response): Promise<Response> {
     try {
       const { body } = req
