@@ -19,11 +19,18 @@ routes.post('/groups/invite/request', auth, emailConfirmation, isInGroup, GroupC
 routes.post('/groups/accept/request', auth, emailConfirmation, GroupController.acceptRequest)
 // Update group
 routes.put('/groups/:id', auth, emailConfirmation, isCreatorOrAdmin, uploadImg.single('file'), GroupController.update)
+// Move member to admin
+routes.put('/groups/admin/:id', auth, emailConfirmation, isCreatorOrAdmin, GroupController.moveToAdmin)
 // Logout of group
 routes.delete('/groups/logout/:id', auth, emailConfirmation, GroupController.logoutGroup)
 // Logout of group
 routes.delete('/groups/participant/remove/:id/:idParticipant', auth, emailConfirmation, isCreatorOrAdmin, GroupController.removeParticipantGroup)
 // Destroy group
 routes.delete('/groups/:id', auth, emailConfirmation, isCreator, GroupController.destroy)
+
+// New Message
+routes.put('/group/message/new/:id', auth, emailConfirmation, isInGroup, GroupController.storeMessage)
+// Destroy Message
+routes.delete('/group/message/delete/:id', auth, emailConfirmation, isInGroup, GroupController.destroyMessage)
 
 export default routes

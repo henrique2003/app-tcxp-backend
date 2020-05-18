@@ -6,17 +6,20 @@ import { responseWithToken } from '../helpers'
 
 export const isInGroup = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { body, userId, newToken } = req
+    const { params, body, userId, newToken } = req
     const { group } = body
+    const { id } = params
 
-    if (!validObjectId(group)) {
-      return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
+    const idGroup = group || id
+
+    if (!validObjectId(idGroup)) {
+      return res.status(404).json(responseWithToken(notFound('Grupo'), newToken))
     }
 
-    if (!await Groups.findOne({ _id: group, creator: userId })) {
-      if (!await Groups.findOne({ _id: group, administrator: userId })) {
-        if (!await Groups.findOne({ _id: group, members: userId })) {
-          return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
+    if (!await Groups.findOne({ _id: idGroup, creator: userId })) {
+      if (!await Groups.findOne({ _id: idGroup, administrator: userId })) {
+        if (!await Groups.findOne({ _id: idGroup, members: userId })) {
+          return res.status(404).json(responseWithToken(notFound('Grupo'), newToken))
         }
       }
     }

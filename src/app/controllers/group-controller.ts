@@ -373,7 +373,122 @@ class GroupsController {
 
       return res.status(200).json(responseWithToken(deleteSuccess(), newToken))
     } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async storeMessage (req: Request, res: Response): Promise<Response> {
+    try {
+      const { body, params, newToken, userId } = req
+      const { id } = params
+      const { message } = body
+
+      req.body = cleanFields(body)
+
+      if (!message) {
+        return res.status(400).json(responseWithToken(notFound('Mensagem'), newToken))
+      }
+
+      const group: any = await Groups.findById(id)
+
+      const newMessage = {
+        user: userId,
+        content: message
+      }
+
+      group.messages.push(newMessage)
+
+      const resGroup = await Groups.findByIdAndUpdate({
+        _id: id
+      }, {
+        $set: group
+      }, {
+        upsert: true
+      })
+
+      return res.status(200).json(responseWithToken(resGroup, newToken))
+    } catch (error) {
       console.log(error.message)
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async destroyMessage (req: Request, res: Response): Promise<Response> {
+    try {
+      const { body, params, newToken, userId } = req
+      const { id } = params
+      const { idMessage } = body
+
+      req.body = cleanFields(body)
+
+      if (!idMessage) {
+        return res.status(401).json(responseWithToken(notFound('Id da mensagem'), newToken))
+      }
+
+      const group = await Groups.findOne({ _id: id, 'messages._id': idMessage, 'messages.user': userId })
+
+      if (!group) {
+        return res.status(401).json(responseWithToken('Você não tem permição para deletar essa mensagem', newToken))
+      }
+
+      if (typeof group.messages === 'object') {
+        group?.messages?.splice(
+          group?.messages?.map(message => message._id).indexOf(idMessage)
+          )
+      }
+
+      const resGroup = await Groups.findByIdAndUpdate({
+        _id: id
+      }, {
+        $set: group
+      }, {
+        upsert: true
+      })
+
+      return res.status(200).json(responseWithToken(resGroup, newToken))
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async moveToAdmin (req: Request, res: Response): Promise<Response> {
+    try {
+      const { body, params, newToken } = req
+      const { id } = params
+      const { idMember } = body
+
+      req.body = cleanFields(body)
+
+      if (!idMember) {
+        return res.status(401).json(responseWithToken(notFound('Id do usuário'), newToken))
+      }
+
+      const group = await Groups.findById(id)
+
+      if (!group) {
+        return res.status(401).json(responseWithToken('Você não pode realizar está ação', newToken))
+      }
+
+      if (typeof group.members === 'object') {
+        group?.members?.splice(
+          group?.members?.map(message => message._id).indexOf(idMember)
+          )
+      }
+      await group.save()
+
+      const reqGroup: any = await Groups.findById(id)
+      reqGroup.administrators?.push(idMember)
+
+      const resGroup = await Groups.findByIdAndUpdate({
+        _id: id
+      }, {
+        $set: reqGroup
+      }, {
+        upsert: true
+      })
+
+      return res.status(200).json(responseWithToken(resGroup, newToken))
+    } catch (error) {
       return res.status(500).json(serverError())
     }
   }

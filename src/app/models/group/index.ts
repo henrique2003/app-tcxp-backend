@@ -30,13 +30,12 @@ const GroupsSchema = new Schema({
     ref: 'User'
   }],
   messages: [{
-    userName: {
-      type: String,
-      required: true
+    user: {
+      type: 'ObjectId',
+      ref: 'User'
     },
     content: {
-      type: String,
-      required: true
+      type: String
     }
   }]
 }, {
