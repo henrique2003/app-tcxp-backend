@@ -469,6 +469,13 @@ class GroupsController {
         return res.status(401).json(responseWithToken('Você não pode realizar está ação', newToken))
       }
 
+      if (typeof group.administrators === 'object' &&
+      group?.administrators?.splice(
+        group?.administrators?.map(admin => admin).indexOf(idMember)
+        )) {
+        return res.status(400).json(responseWithToken('Usuário ja é um admin', newToken))
+      }
+
       if (typeof group.members === 'object') {
         group?.members?.splice(
           group?.members?.map(message => message._id).indexOf(idMember)
