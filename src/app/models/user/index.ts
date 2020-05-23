@@ -29,6 +29,13 @@ const UserSchema = new Schema({
     key: String,
     url: String
   },
+  avaliate: [{
+    user: {
+      type: 'ObjectId',
+      ref: 'User'
+    },
+    avaliate: Number
+  }],
   rememberMe: {
     type: Boolean,
     default: false

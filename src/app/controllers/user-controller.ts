@@ -4,7 +4,15 @@ import validator from 'validator'
 import { Request, Response } from 'express'
 import { User } from '../models'
 import { isValidFields, cleanFields, titleize } from '../../utils'
-import { generateToken, responseWithToken, emailConfirmation, forgotPassword, awsS3DeleteImage } from '../helpers'
+import {
+  generateToken,
+  responseWithToken,
+  emailConfirmation,
+  forgotPassword,
+  awsS3DeleteImage,
+  validObjectId
+} from '../helpers'
+
 import {
   missingParamError,
   invalidFieldError,
@@ -340,6 +348,40 @@ class UserController {
       })
 
       return res.status(200).json(responseWithToken(resUser))
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async avaliate (req: Request, res: Response): Promise<Response> {
+    try {
+      const { body, newToken, userId, params } = req
+      const { avaliate } = body
+      const { id } = params
+
+      if (!id || !validObjectId(id)) {
+        return res.status(400).json(responseWithToken(notFound('Id'), newToken))
+      }
+
+      const user = await User.findById(id)
+
+      if (user?.avaliate.length !== 0) {
+        user?.avaliate.map((avaliate) => {
+          if (avaliate.user == userId) {
+            return res.status(400).json(responseWithToken('Você ja avaliou está pessoa', newToken))
+          }
+        })
+      }
+
+      user?.avaliate.push({
+        user: userId,
+        avaliate
+      })
+
+      if (user) await user.save()
+      const resUser = await User.findById(id)
+
+      return res.status(200).json(responseWithToken(resUser, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }

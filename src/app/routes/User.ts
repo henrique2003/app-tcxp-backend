@@ -24,5 +24,7 @@ routes.get('/email/confirmation/resend', auth, UserController.emailConfirmationR
 routes.post('/forgot/password', UserController.forgotPassword)
 // Forgot password confirm
 routes.post('/forgot/password/confirm', UserController.forgotPasswordConfirm)
+// Avaliate any user
+routes.put('/users/avaliate/:id', auth, emailConfirmation, UserController.avaliate)
 
 export default routes

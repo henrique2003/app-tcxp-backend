@@ -22,6 +22,7 @@ export default interface User extends Document {
     key: string
     url: string
   }
+  avaliate: Avaliate[]
   emailConfirmationExpire?: number
   emailConfirmationCode?: String
   forgotPasswordExpire?: number
@@ -38,4 +39,9 @@ interface InviteRequest {
 interface AcceptRequest {
   to: User
   group: Group
+}
+
+interface Avaliate {
+  user: User | string
+  avaliate: number
 }
