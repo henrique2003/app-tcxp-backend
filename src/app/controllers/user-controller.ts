@@ -386,7 +386,6 @@ class UserController {
         return res.status(400).json(responseWithToken('Você ja avaliou está pessoa', newToken))
       }
 
-      console.log('next level')
       user?.avaliate.push({
         user: userId,
         avaliate
@@ -406,7 +405,6 @@ class UserController {
 
       return res.status(200).json(responseWithToken(resUser, newToken))
     } catch (error) {
-      console.log(error.message)
       return res.status(500).json(serverError())
     }
   }
