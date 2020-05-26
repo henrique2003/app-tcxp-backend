@@ -101,8 +101,7 @@ class UserController {
 
   public async update (req: Request, res: Response): Promise<Response> {
     const { body, userId, newToken, file } = req
-    const { password, passwordConfirmation, email, rememberMe } = body
-    const { key, originalname, size, location } = file
+    const { password, passwordConfirmation, email, rememberMe, interestings } = body
 
     try {
       req.body = cleanFields(body)
@@ -147,10 +146,21 @@ class UserController {
       // Valid passwordConfirmation
       if (password) {
         if (password !== passwordConfirmation) {
-          return res.status(400).json(responseWithToken(invalidFieldError('confirmar email'), newToken))
+          return res.status(400).json(responseWithToken(invalidFieldError('confirmar senha'), newToken))
         } else {
           lastUser.password = await hash(password, 10)
         }
+      }
+
+      // Interestings
+      if (interestings) {
+        let newInterestings: string[] = interestings.split(',')
+
+        newInterestings = newInterestings.map(interesting => {
+          return interesting.trim()
+        })
+
+        fieldsUser.interestings = newInterestings
       }
 
       if (rememberMe) fieldsUser.rememberMe = true
@@ -158,6 +168,7 @@ class UserController {
 
       // Upload image
       if (file) {
+        const { key, originalname, size, location } = file
         // Delete last image if exists
         if (imageProfile) {
           awsS3DeleteImage(imageProfile.key)
@@ -180,8 +191,10 @@ class UserController {
       return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
       if (file) {
-        awsS3DeleteImage(key)
+        awsS3DeleteImage(file.key)
       }
+
+      console.log(error.message)
       return res.status(500).json(serverError())
     }
   }

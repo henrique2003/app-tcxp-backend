@@ -41,6 +41,7 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
+  interestings: [String],
   inviteRequest: [{
     from: {
       type: 'ObjectId',

@@ -24,6 +24,7 @@ export default interface User extends Document {
   }
   avaliate: Avaliate[]
   totalAvaliate?: number
+  interestings?: string[]
   emailConfirmationExpire?: number
   emailConfirmationCode?: String
   forgotPasswordExpire?: number
