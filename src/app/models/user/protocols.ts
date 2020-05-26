@@ -23,6 +23,7 @@ export default interface User extends Document {
     url: string
   }
   avaliate: Avaliate[]
+  totalAvaliate?: number
   emailConfirmationExpire?: number
   emailConfirmationCode?: String
   forgotPasswordExpire?: number

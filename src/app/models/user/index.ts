@@ -36,6 +36,7 @@ const UserSchema = new Schema({
     },
     avaliate: Number
   }],
+  totalAvaliate: Number,
   rememberMe: {
     type: Boolean,
     default: false

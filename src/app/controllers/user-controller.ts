@@ -365,24 +365,48 @@ class UserController {
 
       const user = await User.findById(id)
 
+      if (!user) {
+        return res.status(400).json(responseWithToken(notFound('User'), newToken))
+      }
+
+      if (user._id == userId) {
+        return res.status(401).json(responseWithToken('Você não pode se auto avaliar', newToken))
+      }
+
+      let ifRepeatAvaliate = false
       if (user?.avaliate.length !== 0) {
         user?.avaliate.map((avaliate) => {
           if (avaliate.user == userId) {
-            return res.status(400).json(responseWithToken('Você ja avaliou está pessoa', newToken))
+            ifRepeatAvaliate = true
           }
         })
       }
 
+      if (ifRepeatAvaliate) {
+        return res.status(400).json(responseWithToken('Você ja avaliou está pessoa', newToken))
+      }
+
+      console.log('next level')
       user?.avaliate.push({
         user: userId,
         avaliate
       })
+
+      let avaliations = 0
+      for (const avaliation of user?.avaliate) {
+        avaliations = avaliations + avaliation.avaliate
+      }
+
+      if (user.avaliate.length !== 0) {
+        user.totalAvaliate = avaliations / user.avaliate.length
+      }
 
       if (user) await user.save()
       const resUser = await User.findById(id)
 
       return res.status(200).json(responseWithToken(resUser, newToken))
     } catch (error) {
+      console.log(error.message)
       return res.status(500).json(serverError())
     }
   }
