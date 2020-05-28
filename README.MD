@@ -97,4 +97,3 @@ Aguarde até que apareça as mensagens abaixo para começar a usar a api:
 ### Criadores
 
 * [Henrique Cristioglu](https://github.com/henrique2003)
-* [Antonio Murilo](https://github.com/antoniomurilo)
