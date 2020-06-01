@@ -1,6 +1,6 @@
 # app-viagem-backend
 
-Descrição: backend da aplicação NOMEDAEMPRESA que tem como objetivo juntar pessoas que querem viajar sózinhas e tem o mesmos destinos em mente.
+Descrição: backend da aplicação txcp que tem como objetivo juntar pessoas que querem viajar sózinhas e tem o mesmos destinos em mente.
 
 <br />
 
