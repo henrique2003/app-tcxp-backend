@@ -91,9 +91,3 @@ Aguarde até que apareça as mensagens abaixo para começar a usar a api:
 	  Método: delete
 	  Rota: http://localhost:3001/api/users'
 	  json: null
-
-<br />
-
-### Criadores
-
-* [Henrique Cristioglu](https://github.com/henrique2003)
