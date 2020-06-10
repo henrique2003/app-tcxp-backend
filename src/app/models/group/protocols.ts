@@ -19,7 +19,7 @@ interface IPagination {
 export interface Group extends Document {
   title: string
   description: string
-  image?: {
+  image: {
     name: string
     size: number
     key: string

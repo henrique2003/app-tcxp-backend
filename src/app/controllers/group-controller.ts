@@ -213,44 +213,50 @@ class GroupsController {
 
       const lastGroup = await Groups.findById(id)
 
-      const fieldsGroup: any = lastGroup
-
-      if (title && !await Groups.findOne({ title })) {
-        fieldsGroup.title = title
-      } else {
-        return res.status(400).json(responseWithToken(fieldInUse('Titulo'), newToken))
+      if (!lastGroup) {
+        return res.status(400).json(responseWithToken(notFound('Grupo'), newToken))
       }
 
-      if (description) fieldsGroup.description = description
+      if (title) {
+        if (!await Groups.findOne({ title })) {
+          return res.status(400).json(responseWithToken(fieldInUse('Titulo'), newToken))
+        }
+      }
+
+      lastGroup.title = title
+
+      if (description) lastGroup.description = description
 
       if (file) {
         // Delete last image if exists
-        if (fieldsGroup.image) {
-          awsS3DeleteImage(fieldsGroup.image.key)
+        if (lastGroup.image) {
+          awsS3DeleteImage(lastGroup.image.key)
         }
 
-        const image: {
-          name?: string
-          size?: Number
-          key?: string
-          url?: string
-        } = {}
-
-        if (file.originalname) image.name = file.originalname
-        if (file.size) image.size = file.size
-        if (file.key) image.key = file.key
-        if (file.location) image.url = file.location
-
-        fieldsGroup.image = image
+        if (file.originalname) lastGroup.image.name = file.originalname.toString()
+        if (file.size) lastGroup.image.size = file.size
+        if (file.key) lastGroup.image.key = file.key
+        if (file.location) lastGroup.image.url = file.location
       }
 
       const group = await Groups.findByIdAndUpdate({
         _id: id
       }, {
-        $set: fieldsGroup
+        $set: lastGroup
       }, {
         upsert: true
       })
+
+      if (group) {
+        if (title) group.title = title
+        if (description) group.description = description
+        if (file) {
+          group.image.name = file.originalname
+          group.image.size = file.size
+          group.image.key = file.key
+          group.image.url = file.location
+        }
+      }
 
       return res.status(200).json(responseWithToken(group, newToken))
     } catch (error) {
@@ -295,8 +301,9 @@ class GroupsController {
 
   public async removeParticipantGroup (req: Request, res: Response): Promise<Response> {
     try {
-      const { params, newToken } = req
-      const { id, idParticipant } = params
+      const { params, newToken, body } = req
+      const { id } = params
+      const { idParticipant } = body
 
       const group = await Groups.findById(id)
 
@@ -417,44 +424,6 @@ class GroupsController {
     }
   }
 
-  public async destroyMessage (req: Request, res: Response): Promise<Response> {
-    try {
-      const { body, params, newToken, userId } = req
-      const { id } = params
-      const { idMessage } = body
-
-      req.body = cleanFields(body)
-
-      if (!idMessage) {
-        return res.status(401).json(responseWithToken(notFound('Id da mensagem'), newToken))
-      }
-
-      const group = await Groups.findOne({ _id: id, 'messages._id': idMessage, 'messages.user': userId })
-
-      if (!group) {
-        return res.status(401).json(responseWithToken('Você não tem permição para deletar essa mensagem', newToken))
-      }
-
-      if (typeof group.messages === 'object') {
-        group?.messages?.splice(
-          group?.messages?.map(message => message._id).indexOf(idMessage)
-          )
-      }
-
-      const resGroup = await Groups.findByIdAndUpdate({
-        _id: id
-      }, {
-        $set: group
-      }, {
-        upsert: true
-      })
-
-      return res.status(200).json(responseWithToken(resGroup, newToken))
-    } catch (error) {
-      return res.status(500).json(serverError())
-    }
-  }
-
   public async moveToAdmin (req: Request, res: Response): Promise<Response> {
     try {
       const { body, params, newToken } = req
@@ -473,10 +442,11 @@ class GroupsController {
         return res.status(401).json(responseWithToken('Você não pode realizar está ação', newToken))
       }
 
-      if (typeof group.administrators === 'object' &&
-      group?.administrators?.splice(
-        group?.administrators?.map(admin => admin).indexOf(idMember)
-        )) {
+      if (!await Groups.findOne({ _id: id, members: idMember })) {
+        return res.status(400).json(responseWithToken(notFound('Membro'), newToken))
+      }
+
+      if (await Groups.findOne({ _id: id, administrators: idMember })) {
         return res.status(400).json(responseWithToken('Usuário ja é um admin', newToken))
       }
 
@@ -496,7 +466,11 @@ class GroupsController {
         $set: reqGroup
       }, {
         upsert: true
-      })
+      }) as any
+
+      if (resGroup) {
+        resGroup.administrators?.push(idMember)
+      }
 
       return res.status(200).json(responseWithToken(resGroup, newToken))
     } catch (error) {

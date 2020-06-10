@@ -24,13 +24,11 @@ routes.put('/groups/admin/:id', auth, emailConfirmation, isCreatorOrAdmin, Group
 // Logout of group
 routes.delete('/groups/logout/:id', auth, emailConfirmation, GroupController.logoutGroup)
 // Logout of group
-routes.delete('/groups/participant/remove/:id/:idParticipant', auth, emailConfirmation, isCreatorOrAdmin, GroupController.removeParticipantGroup)
+routes.delete('/groups/participant/remove/:id', auth, emailConfirmation, isCreatorOrAdmin, GroupController.removeParticipantGroup)
 // Destroy group
 routes.delete('/groups/:id', auth, emailConfirmation, isCreator, GroupController.destroy)
 
 // New Message
 routes.put('/group/message/new/:id', auth, emailConfirmation, isInGroup, GroupController.storeMessage)
-// Destroy Message
-routes.delete('/group/message/delete/:id', auth, emailConfirmation, isInGroup, GroupController.destroyMessage)
 
 export default routes
