@@ -253,8 +253,7 @@ class UserController {
 
   public async emailConfirmation (req: Request, res: Response): Promise<Response> {
     try {
-      const { userId, newToken } = req
-      const id = userId
+      const { userId: id, newToken } = req
 
       const user: any = await User.findById(id).select('+emailConfirmationExpire emailConfirmationCode')
 
