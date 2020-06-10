@@ -406,6 +406,10 @@ class GroupsController {
         upsert: true
       })
 
+      if (resGroup) {
+        resGroup.messages?.push(newMessage)
+      }
+
       return res.status(200).json(responseWithToken(resGroup, newToken))
     } catch (error) {
       console.log(error.message)
