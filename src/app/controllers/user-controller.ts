@@ -188,6 +188,24 @@ class UserController {
         upsert: true
       })
 
+      if (user) {
+        if (fieldsUser.name) user.name = fieldsUser.name
+        if (fieldsUser.email) user.email = fieldsUser.email
+        if (fieldsUser.city) user.city = fieldsUser.city
+        if (fieldsUser.state) user.state = fieldsUser.state
+        if (fieldsUser.country) user.country = fieldsUser.country
+        if (fieldsUser.celphone) user.celphone = fieldsUser.celphone
+        if (fieldsUser.facebook) user.facebook = fieldsUser.facebook
+        if (fieldsUser.instagram) user.instagram = fieldsUser.instagram
+        if (fieldsUser.twitter) user.twitter = fieldsUser.twitter
+        if (file) {
+          user.imageProfile.size = fieldsUser.imageProfile.size
+          user.imageProfile.name = fieldsUser.imageProfile.originalname
+          user.imageProfile.key = fieldsUser.imageProfile.key
+          user.imageProfile.url = fieldsUser.imageProfile.url
+        }
+      }
+
       return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
       if (file) {
