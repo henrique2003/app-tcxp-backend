@@ -24,7 +24,7 @@ Descrição: backend da aplicação txcp que tem como objetivo juntar pessoas qu
 
 ### Instalação
 
-Abra o seu prompt de comando(cmd ou tela preta) navegue até um diretório de sua escolha atravéz do comando `cd <NOME DO DIRETÓRIO>` e rode o comando `npm clone https://github.com/henrique2003/app-viagem-backend.git` para clonar a aplicação em sua máquina.
+Abra o seu prompt de comando(cmd ou tela preta) navegue até um diretório de sua escolha atravéz do comando `cd <NOME DO DIRETÓRIO>` e rode o comando `git clone https://github.com/henrique2003/app-viagem-backend.git` para clonar a aplicação em sua máquina.
 
 Após clonar o projeto, entre na pasta raiz do projeto com `cd app-viagem-backend` e rode os seguintes comandos:
 
