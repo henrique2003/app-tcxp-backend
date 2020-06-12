@@ -39,7 +39,7 @@ Crie um arquivo `.env` na raiz do projeto com as seguintes variáves:
 * AWS_SECRET_KEY - Rebece a `secret key` também gerado pela amazon, para upload de imagens.<br /><br />
 * AWS_DEFAULT_REGION - Recebe o `region`, que mostra em que região seu serviço AWS estará hospedado.<br /><br />
 * AWS_BUCKET - Recebe o `bucket name`, que é o nome do bucket no s3 onde será armazenado suas fotos.<br /><br />
-* MAIL_HOST - Recebe o `host` fornecido por um serviço de email, para o envio do deles.<br /><br />
+* MAIL_HOST - Recebe o `host` fornecido por um serviço de email, para o envio deles.<br /><br />
 * MAIL_PORT - Recebe o `port` fornecido pelo serviço de email, necessário para o envio deles.<br /><br />
 * MAIL_AUTH_USER - Recebe o `user` fornecido pelo serviço de email, necessário para o envio deles.<br /><br />
 * MAIL_AUTH_PASS - Recebe o `pass` fornecido pelo serviço de email, necessário para o envio deles.<br /><br />
