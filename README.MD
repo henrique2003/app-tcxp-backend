@@ -1,6 +1,6 @@
-# app-viagem-backend
+# app-tcxp-backend
 
-Descrição: backend da aplicação txcp que tem como objetivo juntar pessoas que querem viajar sózinhas e tem o mesmos destinos em mente.
+Descrição: backend do app tcxp.
 
 <br />
 
@@ -20,14 +20,32 @@ Descrição: backend da aplicação txcp que tem como objetivo juntar pessoas qu
 
 <br />
 
-## Como usar?
+### Como usar?
 
-### Instalação
+	1 - Abra o seu prompt de comando(cmd ou tela preta).<br />
 
-Abra o seu prompt de comando(cmd ou tela preta) navegue até um diretório de sua escolha atravéz do comando `cd <NOME DO DIRETÓRIO>` e rode o comando `git clone https://github.com/henrique2003/app-viagem-backend.git` para clonar a aplicação em sua máquina.
+	2 - Navegue até um diretório de sua escolha atravéz do comando `cd NOME DO DIRETÓRIO`.<br />
 
-Após clonar o projeto, entre na pasta raiz do projeto com `cd app-viagem-backend` e rode os seguintes comandos:
+	3 - Rode o comando `git clone https://github.com/henrique2003/app-tcxp-backend.git` para clonar o app em sua máquina.<br/>
 
+	4 - Após clonar o projeto, entre na pasta raiz do projeto com `cd app-tcxp-backend`.
+
+#### Variáveis ambiente a serem configuradas
+
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáves:
+
+* SECRET_TOKEN - Recebe o `secret` necessário para gerar tokens de autenticação com jwt.<br /><br />
+* AWS_KEI_ID - Rebece o `id key` gerado pela amazon, para upload de imagens.<br /><br />
+* AWS_SECRET_KEY - Rebece a `secret key` também gerado pela amazon, para upload de imagens.<br /><br />
+* AWS_DEFAULT_REGION - Recebe o `region`, que em que região seu serviço AWS estará hospedado.<br /><br />
+* AWS_BUCKET - Recebe o `bucket name`, que é o nome do bucket no s3 onde será armazenado suas fotos.<br /><br />
+* MAIL_HOST - Recebe o `host` fornecido por um serviço de email, para o envio do deles.<br /><br />
+* MAIL_PORT - Recebe o `port` fornecido pelo serviço de email, necessário para o envio deles.<br /><br />
+* MAIL_AUTH_USER - Recebe o `user` fornecido pelo serviço de email, necessário para o envio deles.<br /><br />
+* MAIL_AUTH_PASS - Recebe o `pass` fornecido pelo serviço de email, necessário para o envio deles.<br /><br />
+
+### Rodando o projeto
+Rode os seguintes comandos:
 * `npm install` ou `yarn` (instalar as dependencias)
 * `npm run dev` ou `yarn dev` (iniciar o projeto)
 
@@ -39,55 +57,3 @@ Aguarde até que apareça as mensagens abaixo para começar a usar a api:
 	MongoDb conncted...
 
 <br />
-
-### Rotas que não necessitam de nenhum tipo de autenticação
-
-	Criar conta:
-	  Método: post 
-	  Rota: 'http://localhost:3001/api/users'
-	  json:
-	  {
-        "name": "Marcos",
-        "email": "marcos@gmail.com",
-        "password": "marcos123"
-	  }
-		
-	Login:
-	  Método: post
-	  Rota: 'http://localhost:3001/api/login'
-	  json:
-	  {
-        "email": "marcos@gmail.com",
-        "password": "marcos123"
-	  }
-
-	Ver perfil de outros usuários:
-	  Método: get
-	  Rota: 'http://localhost:3001/api/user/hd1h452h134n169j04u83'
-	  json: null
-
-	Ver todas os grupos de viagem disponíveis:
-	  Método: get
-	  Rota: '/api/groups'
-	  json: null
-
-### Rotas que necessitam de login e confirmação de email
-
-	Alterar informações de perfil do usuário:
-	  Método: put
-	  Rota: 'http://localhost:3001/api/users'
-	  json: 
-	  {
-        "name": "Marcos",
-        "email": "marcos@gmail.com",
-        "password": "marcos123",
-        "country": "Brasil",
-        "state": "São Paulo",
-        "city": "São Paulo",
-        "celphone": "11 2847-2647"
-	  }
-
-	Deletar sua conta:
-	  Método: delete
-	  Rota: http://localhost:3001/api/users'
-	  json: null
