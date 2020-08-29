@@ -4,7 +4,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import { config } from 'dotenv'
 
-import { User, Auth, Group } from './app/routes'
+import { User, Auth, Group, Denounce } from './app/routes'
 import Db from './config/db'
 
 config()
@@ -30,6 +30,7 @@ class App {
     this.express.use('/api', User)
     this.express.use('/api', Auth)
     this.express.use('/api', Group)
+    this.express.use('/api', Denounce)
   }
 }
 
