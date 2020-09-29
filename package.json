@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.ts",
   "engines": {
     "node": "12.x",
     "npm": "6.x"
@@ -39,15 +39,15 @@
     "morgan": "^1.10.0",
     "npm-check": "^5.9.2",
     "supertest": "^4.0.2",
-    "ts-node": "^8.10.1",
-    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts --watch",
+    "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts --watch",
+    "build": "tsc",
     "start": "node ./dist/server.js",
-    "heroku-prebuild": "Before Heroku installs dependencies.",
-    "heroku-postbuild": "After Heroku installs dependencies, but before Heroku prunes and caches dependencies.",
+    "postinstall": "tsc",
+    "heroku-prebuild": "npm run build",
+    "heroku-postbuild": "npm run start",
     "heroku-cleanup": "After Heroku prunes and caches dependencies."
   },
   "dependencies": {
@@ -66,6 +66,8 @@
     "nodemailer-express-handlebars": "^4.0.0",
     "nodemailer-smtp-transport": "^2.7.4",
     "ts-mongoose-pagination": "^1.1.2",
-    "validator": "^13.0.0"
+    "validator": "^13.0.0",
+    "ts-node": "^8.10.1",
+    "ts-node-dev": "^1.0.0-pre.44"
   }
 }
