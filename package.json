@@ -41,8 +41,7 @@
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts --watch",
-    "start": "node ./dist/server.js",
-    "build": "tsc"
+    "start": "node ./dist/server.js"
   },
   "dependencies": {
     "aws-sdk": "^2.673.0",
