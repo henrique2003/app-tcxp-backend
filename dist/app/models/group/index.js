@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Groups = void 0;
 const mongoose_1 = require("mongoose");
 const ts_mongoose_pagination_1 = require("ts-mongoose-pagination");
 const GroupsSchema = new mongoose_1.Schema({

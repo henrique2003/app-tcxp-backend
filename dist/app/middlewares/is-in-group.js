@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isInGroup = void 0;
 const models_1 = require("../models");
 const errors_1 = require("../errors");
 const valid_object_id_1 = require("../helpers/valid-object-id");

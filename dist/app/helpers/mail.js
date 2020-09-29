@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.forgotPassword = exports.emailConfirmation = void 0;
 const mailer_1 = __importDefault(require("../../modules/mailer"));
 exports.emailConfirmation = (user) => {
     try {

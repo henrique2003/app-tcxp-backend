@@ -2,6 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
+  "engines": {
+    "node": "12.x",
+    "npm": "6.x"
+  },
   "author": "Henrique de melo <henrique.de.melo.cristioglu@gmail.com>",
   "license": "MIT",
   "devDependencies": {
@@ -41,7 +45,10 @@
   },
   "scripts": {
     "dev": "ts-node-dev --respawn --transpileOnly ./src/server.ts --watch",
-    "start": "node ./dist/server.js"
+    "start": "node ./dist/server.js",
+    "heroku-prebuild": "Before Heroku installs dependencies.",
+    "heroku-postbuild": "After Heroku installs dependencies, but before Heroku prunes and caches dependencies.",
+    "heroku-cleanup": "After Heroku prunes and caches dependencies."
   },
   "dependencies": {
     "aws-sdk": "^2.673.0",

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.titleize = void 0;
 exports.titleize = (text) => {
     const words = text.toLowerCase().split(' ');
     for (let a = 0; a < words.length; a++) {
