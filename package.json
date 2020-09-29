@@ -45,7 +45,6 @@
     "dev": "ts-node-dev --respawn --transpile-only ./src/server.ts --watch",
     "build": "tsc",
     "start": "node ./dist/server.js",
-    "postinstall": "tsc",
     "heroku-prebuild": "npm run build",
     "heroku-postbuild": "npm run start",
     "heroku-cleanup": "After Heroku prunes and caches dependencies."

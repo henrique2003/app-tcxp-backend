@@ -120,7 +120,7 @@ class UserController {
 
         // Valid id email alredy in use
         if (await User.findOne({ email })) {
-          return res.status(400).json(responseWithToken(fieldInUse('email'), newToken))
+          return res.status(400).json(responseWithToken(fieldInUse('Email'), newToken))
         }
       }
 

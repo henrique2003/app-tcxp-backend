@@ -19,7 +19,7 @@ class App {
   }
 
   private middlewares (): void {
-    this.express.use(cors({ origin: process.env.ACCESS_URL }))
+    this.express.use(cors())
     this.express.use(helmet())
     this.express.use(express.urlencoded({ extended: true }))
     this.express.use(morgan('dev'))
