@@ -35,7 +35,8 @@ const UserSchema = new Schema({
       type: 'ObjectId',
       ref: 'User'
     },
-    avaliate: Number
+    avaliate: Number,
+    comment: String
   }],
   totalAvaliate: Number,
   rememberMe: {

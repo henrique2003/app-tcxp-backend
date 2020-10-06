@@ -17,6 +17,7 @@ const UserSchema = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    description: String,
     country: String,
     state: String,
     city: String,
@@ -35,7 +36,8 @@ const UserSchema = new mongoose_1.Schema({
                 type: 'ObjectId',
                 ref: 'User'
             },
-            avaliate: Number
+            avaliate: Number,
+            comment: String
         }],
     totalAvaliate: Number,
     rememberMe: {

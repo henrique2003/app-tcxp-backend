@@ -47,4 +47,5 @@ interface AcceptRequest {
 interface Avaliate {
   user: User | string
   avaliate: number
+  comment: string
 }

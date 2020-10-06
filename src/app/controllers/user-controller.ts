@@ -119,8 +119,11 @@ class UserController {
         }
 
         // Valid id email alredy in use
-        if (await User.findOne({ email })) {
-          return res.status(400).json(responseWithToken(fieldInUse('Email'), newToken))
+        const userEmail = await User.findOne({ email })
+        if (userEmail) {
+          if (userEmail._id != userId) {
+            return res.status(400).json(responseWithToken(fieldInUse('Email'), newToken))
+          }
         }
       }
 
@@ -225,7 +228,7 @@ class UserController {
 
       if (!id) return res.status(400).json(responseWithToken(notFound('id')))
 
-      const user = await User.findById(id)
+      const user = await User.findById(id).populate('avaliate.user')
 
       if (!user) return res.status(400).json(responseWithToken(notFound('Usuário')))
 
@@ -388,8 +391,13 @@ class UserController {
   public async avaliate (req: Request, res: Response): Promise<Response> {
     try {
       const { body, newToken, userId, params } = req
-      const { avaliate } = body
+      const { avaliate, comment } = body
       const { id } = params
+
+      const requiredFields = ['avaliate', 'comment']
+      if (!isValidFields(requiredFields, body)) {
+        return res.status(400).json(responseWithToken(missingParamError()))
+      }
 
       if (!id || !validObjectId(id)) {
         return res.status(400).json(responseWithToken(notFound('Id'), newToken))
@@ -420,7 +428,8 @@ class UserController {
 
       user?.avaliate.push({
         user: userId,
-        avaliate
+        avaliate,
+        comment
       })
 
       let avaliations = 0
