@@ -5,6 +5,7 @@ export default interface User extends Document {
   name: string
   password: string
   email: string
+  description?: string
   cpf?: string
   rg?: string
   country?: string

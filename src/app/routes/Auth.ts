@@ -6,7 +6,9 @@ const routes = Router()
 
 // Login
 routes.post('/login', AuthController.login)
-// Load user
-routes.get('/load', auth, emailConfirmation, AuthController.loadUser)
+// Load user with email confirmation
+routes.get('/load/user', auth, emailConfirmation, AuthController.loadUser)
+// Load user no email confirmation
+routes.get('/load', auth, AuthController.loadUser)
 
 export default routes

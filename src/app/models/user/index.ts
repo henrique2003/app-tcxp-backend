@@ -16,6 +16,7 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  description: String,
   country: String,
   state: String,
   city: String,

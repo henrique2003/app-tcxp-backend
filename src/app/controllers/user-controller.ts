@@ -133,7 +133,8 @@ class UserController {
         'celphone',
         'facebook',
         'instagram',
-        'twitter'
+        'twitter',
+        'description'
       ]
 
       const fieldsUser: any = lastUser
@@ -191,6 +192,7 @@ class UserController {
       if (user) {
         if (fieldsUser.name) user.name = fieldsUser.name
         if (fieldsUser.email) user.email = fieldsUser.email
+        if (fieldsUser.description) user.description = fieldsUser.description
         if (fieldsUser.city) user.city = fieldsUser.city
         if (fieldsUser.state) user.state = fieldsUser.state
         if (fieldsUser.country) user.country = fieldsUser.country
