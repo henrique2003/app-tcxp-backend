@@ -161,7 +161,7 @@ class UserController {
         let newInterestings: string[] = interestings.split(',')
 
         newInterestings = newInterestings.map(interesting => {
-          return interesting.trim()
+          return interesting.trim().toLocaleLowerCase()
         })
 
         fieldsUser.interestings = newInterestings
@@ -445,6 +445,28 @@ class UserController {
       const resUser = await User.findById(id)
 
       return res.status(200).json(responseWithToken(resUser, newToken))
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async search (req: Request, res: Response): Promise<Response> {
+    try {
+      const { body, newToken } = req
+      const { search } = body
+
+      const requiredFields = ['search']
+      if (!isValidFields(requiredFields, body)) {
+        return res.status(400).json(responseWithToken(missingParamError()))
+      }
+
+      var user = await User.find({ name: search })
+
+      if (user.length === 0) {
+        user = await User.find({ interestings: search.toLowerCase() })
+      }
+
+      return res.status(200).json(responseWithToken(user, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }
