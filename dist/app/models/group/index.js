@@ -37,6 +37,10 @@ const GroupsSchema = new mongoose_1.Schema({
             },
             content: {
                 type: String
+            },
+            inviteDate: {
+                type: Date,
+                default: Date.now()
             }
         }]
 }, {
