@@ -25,12 +25,15 @@ export interface Group extends Document {
     key: string
     url: string
   }
-  messages?: [{
-    _id?: string
-    user?: User | string
-    content?: string
-  }]
+  messages?: Messages[]
   creator?: User[] | string
   administrators?: User[] | string
   members?: User[] | string
+}
+
+interface Messages {
+  _id?: string
+  user?: User | string
+  content?: string
+  inviteDate?: Date
 }

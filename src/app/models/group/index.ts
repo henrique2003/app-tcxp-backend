@@ -36,6 +36,10 @@ const GroupsSchema = new Schema({
     },
     content: {
       type: String
+    },
+    inviteDate: {
+      type: Date,
+      default: Date.now()
     }
   }]
 }, {
