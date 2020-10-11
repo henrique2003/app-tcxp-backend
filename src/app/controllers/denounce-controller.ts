@@ -42,8 +42,8 @@ class DenounceController {
         return res.status(404).json(responseWithToken(notFound('User'), newToken))
       }
 
-      body.to = userId
-      body.from = id
+      body.to = id
+      body.from = userId
 
       const newDenounce = await Denounce.create(body)
 
