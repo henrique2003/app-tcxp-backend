@@ -66,7 +66,7 @@ class GroupsController {
 
   public async show (req: Request, res: Response): Promise<Response> {
     try {
-      const group = await Groups.findById(req.params.id).populate('creator administrators members')
+      const group = await Groups.findById(req.params.id).populate('creator administrators members messages.user')
 
       if (!group) return res.status(400).json(responseWithToken(notFound('Grupo')))
 
