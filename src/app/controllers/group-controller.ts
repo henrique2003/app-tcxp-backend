@@ -180,17 +180,11 @@ class GroupsController {
       }
 
       // add member by the group
-      if (await Groups.findOne({ members: userId })) {
+      if (await Groups.findOne({ _id: group, members: userId })) {
         return res.status(400).json(responseWithToken('Usuário ja esta no grupo', newToken))
       }
       isGroup.members.push(user)
       await isGroup.save()
-
-      // remove inviteRequest
-      isTo?.inviteRequest?.splice(
-        isTo?.inviteRequest?.map(invite => invite.from && invite.group).indexOf(user?._id, isGroup._id)
-      )
-      await isTo.save()
 
       // remove acceptRequest
       user?.acceptRequest?.splice(
@@ -198,7 +192,62 @@ class GroupsController {
       )
       await user?.save()
 
-      return res.status(200).json(responseWithToken(null, newToken))
+      const newUser = await User.findById(userId).populate('acceptRequest.to acceptRequest.group')
+
+      return res.status(200).json(responseWithToken(newUser, newToken))
+    } catch (error) {
+      return res.status(500).json(serverError())
+    }
+  }
+
+  public async rejectRequest (req: Request, res: Response): Promise<Response> {
+    try {
+      const { body, newToken, userId } = req
+      const { to, group } = body
+
+      req.body = cleanFields(body)
+
+      const requiredFields = ['to', 'group']
+      if (!isValidFields(requiredFields, body)) {
+        return res.status(400).json(responseWithToken(missingParamError(), newToken))
+      }
+
+      // Valid object id
+      if (!validObjectId(to)) {
+        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
+      }
+
+      const isTo = await User.findById(to)
+      if (!isTo) {
+        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
+      }
+
+      const isGroup: any = await Groups.findById(group)
+      if (!isGroup) {
+        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
+      }
+
+      // Pick user to valid if accept request exist
+      const user = await User.findById(userId)
+
+      if (!await User.findOne({ _id: userId, 'acceptRequest.to': to, 'acceptRequest.group': group })) {
+        return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
+      }
+
+      // Pick To to valid if invite request exist
+      if (!await User.findOne({ _id: to, 'inviteRequest.from': userId, 'inviteRequest.group': group })) {
+        return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
+      }
+
+      // remove acceptRequest
+      user?.acceptRequest?.splice(
+        user?.acceptRequest?.map(accept => accept.to && accept.group).indexOf(to, isGroup._id)
+      )
+      await user?.save()
+
+      const newUser = await User.findById(userId).populate('acceptRequest.to acceptRequest.group')
+
+      return res.status(200).json(responseWithToken(newUser, newToken))
     } catch (error) {
       return res.status(500).json(serverError())
     }
@@ -245,7 +294,7 @@ class GroupsController {
         $set: lastGroup
       }, {
         upsert: true
-      })
+      }).populate('creator administrators members')
 
       if (group) {
         if (title) group.title = title

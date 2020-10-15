@@ -17,6 +17,8 @@ routes.get('/group/:id', GroupController.show)
 routes.post('/groups/invite/request', auth, emailConfirmation, isInGroup, GroupController.inviteRequest)
 // Accept request
 routes.post('/groups/accept/request', auth, emailConfirmation, GroupController.acceptRequest)
+// Reject request
+routes.post('/groups/reject/request', auth, emailConfirmation, GroupController.rejectRequest)
 // Update group
 routes.put('/groups/:id', auth, emailConfirmation, isCreatorOrAdmin, uploadImg.single('file'), GroupController.update)
 // Move member to admin
