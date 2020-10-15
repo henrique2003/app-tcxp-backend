@@ -218,7 +218,7 @@ class GroupsController {
       }
 
       if (title) {
-        if (!await Groups.findOne({ title })) {
+        if (await Groups.findOne({ title })) {
           return res.status(400).json(responseWithToken(fieldInUse('Titulo'), newToken))
         }
       }
