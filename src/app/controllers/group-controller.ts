@@ -214,30 +214,30 @@ class GroupsController {
 
       // Valid object id
       if (!validObjectId(to)) {
-        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
+        return res.status(400).json(responseWithToken(notFound('Convite4'), newToken))
       }
 
       const isTo = await User.findById(to)
       if (!isTo) {
-        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
+        return res.status(400).json(responseWithToken(notFound('Convite1'), newToken))
       }
 
       const isGroup: any = await Groups.findById(group)
       if (!isGroup) {
-        return res.status(400).json(responseWithToken(notFound('Convite'), newToken))
+        return res.status(400).json(responseWithToken(notFound('Convite2'), newToken))
       }
 
       // Pick user to valid if accept request exist
       const user = await User.findById(userId)
 
       if (!await User.findOne({ _id: userId, 'acceptRequest.to': to, 'acceptRequest.group': group })) {
-        return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
+        return res.status(404).json(responseWithToken(notFound('Convite3'), newToken))
       }
 
       // Pick To to valid if invite request exist
-      if (!await User.findOne({ _id: to, 'inviteRequest.from': userId, 'inviteRequest.group': group })) {
-        return res.status(404).json(responseWithToken(notFound('Convite'), newToken))
-      }
+      // if (!await User.findOne({ _id: to, 'inviteRequest.from': userId, 'inviteRequest.group': group })) {
+      //   return res.status(404).json(responseWithToken(notFound('Convite5'), newToken))
+      // }
 
       // remove acceptRequest
       user?.acceptRequest?.splice(
@@ -371,7 +371,6 @@ class GroupsController {
             group?.administrators?.map(member => member._id).indexOf(idParticipant)
             )
       }
-
       await group?.save()
 
       return res.status(200).json(responseWithToken('Removido do grupo com sucesso', newToken))

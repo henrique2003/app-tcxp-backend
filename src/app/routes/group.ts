@@ -25,8 +25,8 @@ routes.put('/groups/:id', auth, emailConfirmation, isCreatorOrAdmin, uploadImg.s
 routes.put('/groups/admin/:id', auth, emailConfirmation, isCreatorOrAdmin, GroupController.moveToAdmin)
 // Logout of group
 routes.delete('/groups/logout/:id', auth, emailConfirmation, GroupController.logoutGroup)
-// Logout of group
-routes.delete('/groups/participant/remove/:id', auth, emailConfirmation, isCreatorOrAdmin, GroupController.removeParticipantGroup)
+// Logout participant of group
+routes.post('/groups/participant/remove/:id', auth, emailConfirmation, isCreatorOrAdmin, GroupController.removeParticipantGroup)
 // Destroy group
 routes.delete('/groups/:id', auth, emailConfirmation, isCreator, GroupController.destroy)
 
