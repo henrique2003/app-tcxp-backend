@@ -28,9 +28,9 @@ class GroupsController {
     try {
       const { userId, newToken } = req
 
-      const creatorGroup = await Groups.find({ creator: userId }).populate('messages.user')
-      const adminGroup = await Groups.find({ administrators: userId }).populate('messages.user')
-      const memberGroup = await Groups.find({ members: userId }).populate('messages.user')
+      const creatorGroup = await Groups.find({ creator: userId }).populate('messages.user administrators members')
+      const adminGroup = await Groups.find({ administrators: userId }).populate('messages.user administrators members')
+      const memberGroup = await Groups.find({ members: userId }).populate('messages.user administrators members')
 
       const groups = { creatorGroup, adminGroup, memberGroup }
 
@@ -457,10 +457,6 @@ class GroupsController {
       await group.save()
 
       const resGroup = await Groups.findById(id).populate('messages.user')
-
-      if (resGroup) {
-        resGroup.messages?.push(newMessage)
-      }
 
       return res.status(200).json(responseWithToken(resGroup, newToken))
     } catch (error) {
