@@ -65,7 +65,7 @@
     "nodemailer-express-handlebars": "^4.0.0",
     "nodemailer-smtp-transport": "^2.7.4",
     "ts-mongoose-pagination": "^1.1.2",
-    "validator": "^13.0.0",
+    "validator": "^13.7.0",
     "ts-node": "^8.10.1",
     "ts-node-dev": "^1.0.0-pre.44"
   }
